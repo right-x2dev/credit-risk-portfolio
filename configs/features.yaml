@@ -1,0 +1,41 @@
+# Model feature policy (spec §3.3, Phase 4).
+# The feature set = every column of analytics.customer_feature_mart
+#   MINUS `exclude` (identifiers, label, metadata, leakage-reviewed columns)
+#   MINUS columns matching `exclude_patterns`.
+# `leakage_review.md` documents why each exclusion exists. The automated leakage check
+# (credit_risk.features.assert_no_leakage) fails the pipeline if any excluded/label-like
+# column reaches the model.
+
+exclude:
+  # identifiers / metadata — not predictive information about the applicant
+  - sk_id_curr
+  - source
+  - feature_version
+  - built_at
+  # label
+  - target
+  # raw DAYS_EMPLOYED carries the 365243 sentinel; the model uses days_employed_clean
+  # + days_employed_anom instead (original kept in the mart for audit)
+  - days_employed
+
+# any column whose name contains one of these tokens is excluded (label leakage guard)
+exclude_patterns:
+  - target
+  - predicted_pd
+  - risk_grade
+  - expected_loss
+
+# columns that exist in the mart and were reviewed as "use with caution" — kept in the default
+# feature set because they are recorded before the decision, but listed for sensitivity analysis
+sensitivity_review:
+  - def_30_cnt_social_circle
+  - def_60_cnt_social_circle
+  - obs_30_cnt_social_circle
+  - obs_60_cnt_social_circle
+  - days_last_phone_change
+  - amt_req_credit_bureau_hour
+  - amt_req_credit_bureau_day
+  - amt_req_credit_bureau_week
+
+# text columns with more distinct values than this are dropped from the model (none expected)
+categorical_max_cardinality: 60

@@ -1,0 +1,164 @@
+table fact_lift
+	lineageTag: c6de7ae1-8f73-4cf2-a6dc-779eaeff28e8
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: df0f4aa0-25b4-4f16-a966-2284b4088d52
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column dataset_split
+		dataType: string
+		lineageTag: 572e92d7-c873-4c7e-83d0-1bc02c704603
+		summarizeBy: none
+		sourceColumn: dataset_split
+
+		annotation SummarizationSetBy = User
+
+	column decile
+		dataType: int64
+		formatString: 0
+		lineageTag: 02e0eb8b-868b-486c-b3ef-0287be7a477a
+		summarizeBy: none
+		sourceColumn: decile
+
+		annotation SummarizationSetBy = User
+
+	column customers
+		dataType: int64
+		formatString: 0
+		lineageTag: 02be229f-1427-4486-ba1b-1ae0d48ad910
+		summarizeBy: sum
+		sourceColumn: customers
+
+		annotation SummarizationSetBy = User
+
+	column positives
+		dataType: int64
+		formatString: 0
+		lineageTag: d9fd85e1-9a73-49c7-a66f-9ea085b6f242
+		summarizeBy: sum
+		sourceColumn: positives
+
+		annotation SummarizationSetBy = User
+
+	column mean_pd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 7f9caabd-bdf1-465c-ac3f-b1cf12d5e192
+		summarizeBy: none
+		sourceColumn: mean_pd
+
+		annotation SummarizationSetBy = User
+
+	column min_pd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 709f89e0-4812-4120-b7aa-e6af41a25807
+		summarizeBy: none
+		sourceColumn: min_pd
+
+		annotation SummarizationSetBy = User
+
+	column max_pd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 45e371bc-23c0-45d1-bd24-03c3e9383b3f
+		summarizeBy: none
+		sourceColumn: max_pd
+
+		annotation SummarizationSetBy = User
+
+	column exposure
+		dataType: double
+		formatString: #,0
+		lineageTag: 0b922c3f-b95c-464c-a9b5-b13f75a8ed44
+		summarizeBy: none
+		sourceColumn: exposure
+
+		annotation SummarizationSetBy = User
+
+	column bad_exposure
+		dataType: double
+		formatString: #,0
+		lineageTag: d6f83c50-b84b-4bb4-a089-33067fce4abb
+		summarizeBy: none
+		sourceColumn: bad_exposure
+
+		annotation SummarizationSetBy = User
+
+	column observed_rate
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 05f495a3-a22a-4204-b94a-0794eb83816a
+		summarizeBy: none
+		sourceColumn: observed_rate
+
+		annotation SummarizationSetBy = User
+
+	column lift
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 8165733f-30ce-4b40-81ef-3f82ef565b84
+		summarizeBy: none
+		sourceColumn: lift
+
+		annotation SummarizationSetBy = User
+
+	column cum_capture_rate
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 3a7aadcf-f6e6-4db2-b128-fefecd27b59c
+		summarizeBy: none
+		sourceColumn: cum_capture_rate
+
+		annotation SummarizationSetBy = User
+
+	column cum_customer_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: e2f2edee-7358-4b66-9a0e-46a3e683a96f
+		summarizeBy: none
+		sourceColumn: cum_customer_share
+
+		annotation SummarizationSetBy = User
+
+	column cum_bad_exposure_capture
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 7571cedc-b575-46f7-8ca9-f1e0db454631
+		summarizeBy: none
+		sourceColumn: cum_bad_exposure_capture
+
+		annotation SummarizationSetBy = User
+
+	column exposure_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 7f64a8ab-3507-45a1-b089-e054dd0ca62d
+		summarizeBy: none
+		sourceColumn: exposure_share
+
+		annotation SummarizationSetBy = User
+
+	partition fact_lift = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_lift"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_lift.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Typed columns" = Table.TransformColumnTypes(Source, {{"model_version_key", Int64.Type}, {"dataset_split", type text}, {"decile", Int64.Type}, {"customers", Int64.Type}, {"positives", Int64.Type}, {"mean_pd", type number}, {"min_pd", type number}, {"max_pd", type number}, {"exposure", type number}, {"bad_exposure", type number}, {"observed_rate", type number}, {"lift", type number}, {"cum_capture_rate", type number}, {"cum_customer_share", type number}, {"cum_bad_exposure_capture", type number}, {"exposure_share", type number}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

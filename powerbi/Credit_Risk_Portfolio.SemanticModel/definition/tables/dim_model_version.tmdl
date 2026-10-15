@@ -1,0 +1,122 @@
+table dim_model_version
+	lineageTag: 372beb32-3aa6-4720-b426-6b6e90927443
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 9cf4cbbd-5f63-463b-99dc-d41b32cbccad
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column model_version
+		dataType: string
+		lineageTag: 7d1b08e0-28bf-42d8-b550-2254456a5e32
+		summarizeBy: none
+		sourceColumn: model_version
+
+		annotation SummarizationSetBy = User
+
+	column algorithm
+		dataType: string
+		lineageTag: d564b0ad-bef7-4f3e-95e4-ff10cda93b7c
+		summarizeBy: none
+		sourceColumn: algorithm
+
+		annotation SummarizationSetBy = User
+
+	column trained_at
+		dataType: dateTime
+		lineageTag: a189b371-42ee-477b-aac9-cc09505b585c
+		summarizeBy: none
+		sourceColumn: trained_at
+
+		annotation SummarizationSetBy = User
+
+	column trained_date
+		dataType: dateTime
+		lineageTag: 17550f25-9b51-4d6c-889b-945403e8d776
+		summarizeBy: none
+		sourceColumn: trained_date
+
+		annotation SummarizationSetBy = User
+
+	column feature_version
+		dataType: string
+		lineageTag: 8a3506d8-6ce8-4bd3-8245-d9818efcc33e
+		summarizeBy: none
+		sourceColumn: feature_version
+
+		annotation SummarizationSetBy = User
+
+	column feature_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 6eb55670-7fb7-4bb0-af23-e310384bedc7
+		summarizeBy: none
+		sourceColumn: feature_count
+
+		annotation SummarizationSetBy = User
+
+	column calibration_method
+		dataType: string
+		lineageTag: 8aeae1e0-dba1-4411-8f65-6327d3722d4b
+		summarizeBy: none
+		sourceColumn: calibration_method
+
+		annotation SummarizationSetBy = User
+
+	column selected_threshold
+		dataType: double
+		formatString: 0.00%
+		lineageTag: c9f72318-e4f3-4941-96f1-d1e782b509b3
+		summarizeBy: none
+		sourceColumn: selected_threshold
+
+		annotation SummarizationSetBy = User
+
+	column split_seed
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e91a201-b586-411a-82a5-8041b9f91592
+		summarizeBy: none
+		sourceColumn: split_seed
+
+		annotation SummarizationSetBy = User
+
+	column is_champion
+		dataType: boolean
+		lineageTag: 0581f182-685d-4b1d-988b-a38fe6e78879
+		summarizeBy: none
+		sourceColumn: is_champion
+
+		annotation SummarizationSetBy = User
+
+	column feature_schema_hash
+		dataType: string
+		lineageTag: 6a970b01-3bc7-4559-97c6-d07873286c61
+		summarizeBy: none
+		sourceColumn: feature_schema_hash
+
+		annotation SummarizationSetBy = User
+
+	partition dim_model_version = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "dim_model_version"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "dim_model_version.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Parsed booleans" = if DataSource = "PostgreSQL" then Source else Table.TransformColumns(Source, {{"is_champion", each if _ = null then null else Text.Lower(_) = "true" or _ = "t"}}),
+				    #"Typed columns" = Table.TransformColumnTypes(#"Parsed booleans", {{"model_version_key", Int64.Type}, {"model_version", type text}, {"algorithm", type text}, {"trained_at", type datetime}, {"trained_date", type date}, {"feature_version", type text}, {"feature_count", Int64.Type}, {"calibration_method", type text}, {"selected_threshold", type number}, {"split_seed", Int64.Type}, {"is_champion", type logical}, {"feature_schema_hash", type text}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

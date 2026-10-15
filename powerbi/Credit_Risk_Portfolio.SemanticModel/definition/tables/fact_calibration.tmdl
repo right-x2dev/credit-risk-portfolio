@@ -1,0 +1,145 @@
+table fact_calibration
+	lineageTag: 75d4cfdf-85ef-4e3e-9d79-2cf34ceac88c
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 5ff5e9e8-77ba-4c41-b91f-8352315fe442
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column dataset_split
+		dataType: string
+		lineageTag: 840b4b23-6d93-40d9-88ef-a6566b6c0b2e
+		summarizeBy: none
+		sourceColumn: dataset_split
+
+		annotation SummarizationSetBy = User
+
+	column score_type
+		dataType: string
+		lineageTag: 46d477f5-0455-4136-84a5-3de8f69f15eb
+		summarizeBy: none
+		sourceColumn: score_type
+
+		annotation SummarizationSetBy = User
+
+	column pd_bin
+		dataType: int64
+		formatString: 0
+		lineageTag: 40ddd125-0476-40c9-87d6-38ac1c96d8fb
+		summarizeBy: none
+		sourceColumn: pd_bin
+
+		annotation SummarizationSetBy = User
+
+	column customers
+		dataType: int64
+		formatString: 0
+		lineageTag: 6bb857bc-6775-4447-95ca-757f3a0d330b
+		summarizeBy: sum
+		sourceColumn: customers
+
+		annotation SummarizationSetBy = User
+
+	column positives
+		dataType: int64
+		formatString: 0
+		lineageTag: 85c63e1e-2ef0-4c4e-b61f-9f0676add567
+		summarizeBy: sum
+		sourceColumn: positives
+
+		annotation SummarizationSetBy = User
+
+	column mean_pd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 7641d559-f6d3-4e8e-9706-0637c826abc0
+		summarizeBy: none
+		sourceColumn: mean_pd
+
+		annotation SummarizationSetBy = User
+
+	column pd_lower
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 263c21d4-81a7-4a44-8273-00b78ca32cea
+		summarizeBy: none
+		sourceColumn: pd_lower
+
+		annotation SummarizationSetBy = User
+
+	column pd_upper
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 2d28e97c-3ab9-402f-9c80-cf7b939883b1
+		summarizeBy: none
+		sourceColumn: pd_upper
+
+		annotation SummarizationSetBy = User
+
+	column observed_rate
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 4816bdce-871b-454c-b6cf-1aca7d911c77
+		summarizeBy: none
+		sourceColumn: observed_rate
+
+		annotation SummarizationSetBy = User
+
+	column ci_low
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 9f495819-c78f-4dba-86a5-d7387602604e
+		summarizeBy: none
+		sourceColumn: ci_low
+
+		annotation SummarizationSetBy = User
+
+	column ci_high
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 641f2bf4-dee8-4d40-866b-77c189d4d39b
+		summarizeBy: none
+		sourceColumn: ci_high
+
+		annotation SummarizationSetBy = User
+
+	column exposure
+		dataType: double
+		formatString: #,0
+		lineageTag: 7e9de1a9-5d3a-4179-bc36-b0e8ed1b2c19
+		summarizeBy: none
+		sourceColumn: exposure
+
+		annotation SummarizationSetBy = User
+
+	column small_sample
+		dataType: boolean
+		lineageTag: 1704665c-1ffa-424c-b6bb-0c02e694ede1
+		summarizeBy: none
+		sourceColumn: small_sample
+
+		annotation SummarizationSetBy = User
+
+	partition fact_calibration = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_calibration"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_calibration.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Parsed booleans" = if DataSource = "PostgreSQL" then Source else Table.TransformColumns(Source, {{"small_sample", each if _ = null then null else Text.Lower(_) = "true" or _ = "t"}}),
+				    #"Typed columns" = Table.TransformColumnTypes(#"Parsed booleans", {{"model_version_key", Int64.Type}, {"dataset_split", type text}, {"score_type", type text}, {"pd_bin", Int64.Type}, {"customers", Int64.Type}, {"positives", Int64.Type}, {"mean_pd", type number}, {"pd_lower", type number}, {"pd_upper", type number}, {"observed_rate", type number}, {"ci_low", type number}, {"ci_high", type number}, {"exposure", type number}, {"small_sample", type logical}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmarksMetadata/1.0.0/schema.json",
+  "items": [
+    {
+      "name": "grp_reset_p1_executive",
+      "displayName": "Reset p1_executive",
+      "children": [
+        "bm_reset_p1_executive"
+      ]
+    },
+    {
+      "name": "grp_reset_p2_segmentation",
+      "displayName": "Reset p2_segmentation",
+      "children": [
+        "bm_reset_p2_segmentation"
+      ]
+    },
+    {
+      "name": "grp_reset_p3_repayment",
+      "displayName": "Reset p3_repayment",
+      "children": [
+        "bm_reset_p3_repayment"
+      ]
+    },
+    {
+      "name": "grp_reset_p4_model",
+      "displayName": "Reset p4_model",
+      "children": [
+        "bm_reset_p4_model"
+      ]
+    },
+    {
+      "name": "grp_reset_p5_scenario",
+      "displayName": "Reset p5_scenario",
+      "children": [
+        "bm_reset_p5_scenario"
+      ]
+    }
+  ]
+}

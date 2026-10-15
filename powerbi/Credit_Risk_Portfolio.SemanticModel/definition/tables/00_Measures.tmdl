@@ -1,0 +1,323 @@
+table '00_Measures'
+	lineageTag: f97439e3-47a1-4bf6-aa5e-51b3595a1abb
+
+	measure 'Total Customers' = DISTINCTCOUNT(fact_customer_risk[sk_id_curr])
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: e21b7a4f-7221-476e-b58b-4e8fa72c4c04
+
+	/// Exposure proxy = AMT_CREDIT (not an observed EAD)
+	measure 'Total Exposure' = SUM(fact_customer_risk[exposure_proxy])
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: fa481dd2-692b-4bd2-a4da-c8d44660c0b2
+
+	measure 'Observed Difficulty Customers' = CALCULATE([Total Customers], fact_customer_risk[target] = 1)
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: fd344fdf-cc3a-43d9-993f-82986370c7e5
+
+	/// Share of customers with TARGET = 1 (observed repayment difficulty, not a lifetime default rate)
+	measure 'Observed Difficulty Rate' = DIVIDE([Observed Difficulty Customers], [Total Customers])
+		formatString: 0.00%
+		displayFolder: Portfolio
+		lineageTag: 5e2e68ee-b139-4d6f-9c4c-637ea9f9ec31
+
+	/// Simple average of calibrated proxy PD (predicts Home Credit TARGET)
+	measure 'Average PD' = AVERAGE(fact_customer_risk[predicted_pd])
+		formatString: 0.00%
+		displayFolder: Portfolio
+		lineageTag: 0fb7fb73-2b19-4c49-8a1d-c23bb90e95d8
+
+	measure 'Exposure Weighted PD' = DIVIDE(SUMX(fact_customer_risk, fact_customer_risk[predicted_pd] * fact_customer_risk[exposure_proxy]), [Total Exposure])
+		formatString: 0.00%
+		displayFolder: Portfolio
+		lineageTag: 33551df3-20cb-497b-a8fd-851a36ff24bc
+
+	/// Expected Loss (Scenario) = PD x AMT_CREDIT x assumed LGD; not a provision or regulatory figure
+	measure 'Base Expected Loss' = SUM(fact_customer_risk[expected_loss])
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: d98d74f8-af57-4b90-8930-b605aa90213e
+
+	measure 'EL Rate' = DIVIDE([Base Expected Loss], [Total Exposure])
+		formatString: 0.00%
+		displayFolder: Portfolio
+		lineageTag: b1641007-4874-43d6-9684-03afbf1e1742
+
+	measure 'High Risk Customers' = CALCULATE([Total Customers], KEEPFILTERS(dim_risk_grade[risk_group] IN {"High", "Critical"}))
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: 36e85bc2-9a62-49ce-8d67-5ae4d4f43e85
+
+	measure 'High Risk Customer %' = DIVIDE([High Risk Customers], [Total Customers])
+		formatString: 0.0%
+		displayFolder: Portfolio
+		lineageTag: f0b75698-6339-4a97-a03a-f8e66d161248
+
+	measure 'High Risk Exposure' = CALCULATE([Total Exposure], KEEPFILTERS(dim_risk_grade[risk_group] IN {"High", "Critical"}))
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: 0a2612a5-e828-441e-9a22-88b31fbabc83
+
+	measure 'High Risk Exposure %' = DIVIDE([High Risk Exposure], [Total Exposure])
+		formatString: 0.0%
+		displayFolder: Portfolio
+		lineageTag: f5843cb8-2d6d-4e05-88b4-79c97f0f5c22
+
+	measure 'High Risk Expected Loss' = CALCULATE([Base Expected Loss], KEEPFILTERS(dim_risk_grade[risk_group] IN {"High", "Critical"}))
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: 3cc4c864-6bb6-494b-8581-3e90e8709674
+
+	/// Share of TARGET=1 exposure that sits in High/Critical grades
+	measure 'Risk Capture (Exposure)' = DIVIDE(CALCULATE([Total Exposure], KEEPFILTERS(dim_risk_grade[risk_group] IN {"High", "Critical"}), fact_customer_risk[target] = 1), CALCULATE([Total Exposure], fact_customer_risk[target] = 1))
+		formatString: 0.0%
+		displayFolder: Portfolio
+		lineageTag: 82fb6baa-3a70-4218-bbc8-7e2594f97294
+
+	measure 'Customer Share %' = DIVIDE([Total Customers], CALCULATE([Total Customers], ALLSELECTED(dim_risk_grade)))
+		formatString: 0.0%
+		displayFolder: Portfolio
+		lineageTag: 8dd829ba-6fce-4c43-ba08-2240eb0c351a
+
+	measure 'Exposure Share %' = DIVIDE([Total Exposure], CALCULATE([Total Exposure], ALLSELECTED(dim_risk_grade)))
+		formatString: 0.0%
+		displayFolder: Portfolio
+		lineageTag: f98b9beb-ea87-4441-ac11-f3807fda908b
+
+	measure 'EL Share of Portfolio %' = DIVIDE([Base Expected Loss], CALCULATE([Base Expected Loss], ALLSELECTED(fact_customer_risk)))
+		formatString: 0.0%
+		displayFolder: Portfolio
+		lineageTag: f2b7d7f3-92d4-4876-9615-819b3e94f648
+
+	measure 'Exposure Share of Portfolio %' = DIVIDE([Total Exposure], CALCULATE([Total Exposure], ALLSELECTED(fact_customer_risk)))
+		formatString: 0.0%
+		displayFolder: Portfolio
+		lineageTag: 70e81f7a-d592-4bb0-956a-f9cad5b8df58
+
+	measure 'Average Exposure' = DIVIDE([Total Exposure], [Total Customers])
+		formatString: #,0
+		displayFolder: Portfolio
+		lineageTag: e80c4b4b-5cda-467e-a238-ba53bcca39bd
+
+	measure 'Executive Narrative' = "High/Critical grades hold " & FORMAT([High Risk Customer %], "0.0%") & " of customers but " & FORMAT([High Risk Exposure %], "0.0%") & " of exposure and " & FORMAT(DIVIDE([High Risk Expected Loss], [Base Expected Loss]), "0.0%") & " of expected loss (scenario). Exposure-weighted PD is " & FORMAT([Exposure Weighted PD], "0.00%") & " vs. an observed difficulty rate of " & FORMAT([Observed Difficulty Rate], "0.00%") & "."
+		displayFolder: Narrative
+		lineageTag: dcd66297-8b67-4fac-ab06-f3400c5c8b31
+
+	/// Customers with >= 1 late Home Credit instalment before this application (customers with history only)
+	measure 'Past Due Customer %' = AVERAGE(fact_customer_risk[is_past_due_history])
+		formatString: 0.0%
+		displayFolder: Repayment
+		lineageTag: 5f9cc6f6-413b-403b-ad66-92ba3ef3ac72
+
+	/// Max instalment DPD >= 30 days before this application
+	measure 'Severe Delinquency Customer %' = AVERAGE(fact_customer_risk[is_severe_delinquency])
+		formatString: 0.0%
+		displayFolder: Repayment
+		lineageTag: c81b8912-b5b9-47e5-b224-e1809b1a365e
+
+	measure 'Average Max DPD' = AVERAGE(fact_customer_risk[inst_dpd_max])
+		formatString: 0.0
+		displayFolder: Repayment
+		lineageTag: 06c8494c-5375-4d56-acf2-0f6f9097c1b2
+
+	measure 'Median Max DPD' = MEDIAN(fact_customer_risk[inst_dpd_max])
+		formatString: 0.0
+		displayFolder: Repayment
+		lineageTag: 42d60c17-40a4-4bb9-a049-074d68a7d409
+
+	measure 'Average Payment Ratio' = AVERAGE(fact_customer_risk[inst_payment_ratio_mean])
+		formatString: 0.0%
+		displayFolder: Repayment
+		lineageTag: eb4c9446-f39c-460a-8e5c-29b90560d517
+
+	measure 'Average Credit Utilization' = AVERAGE(fact_customer_risk[cc_utilization_mean])
+		formatString: 0.0%
+		displayFolder: Repayment
+		lineageTag: 7f6ef120-f4e1-4d33-8f8a-29922cbbd899
+
+	measure 'ROC-AUC' = IF(HASONEVALUE(dim_split[dataset_split]), CALCULATE(MAX(fact_model_evaluation[value]), fact_model_evaluation[metric] = "roc_auc", fact_model_evaluation[is_champion_row] = TRUE()))
+		formatString: 0.000
+		displayFolder: Model
+		lineageTag: 85959294-652d-4f2b-9da2-cd79f72391a0
+
+	measure 'PR-AUC' = IF(HASONEVALUE(dim_split[dataset_split]), CALCULATE(MAX(fact_model_evaluation[value]), fact_model_evaluation[metric] = "pr_auc", fact_model_evaluation[is_champion_row] = TRUE()))
+		formatString: 0.000
+		displayFolder: Model
+		lineageTag: aa6984ce-164c-42da-9118-96f3efb1fcc3
+
+	measure 'Brier Score' = IF(HASONEVALUE(dim_split[dataset_split]), CALCULATE(MAX(fact_model_evaluation[value]), fact_model_evaluation[metric] = "brier", fact_model_evaluation[is_champion_row] = TRUE()))
+		formatString: 0.0000
+		displayFolder: Model
+		lineageTag: 97413a8d-8f08-4e56-a35a-721ccd0cd7f2
+
+	measure 'Log Loss' = IF(HASONEVALUE(dim_split[dataset_split]), CALCULATE(MAX(fact_model_evaluation[value]), fact_model_evaluation[metric] = "log_loss", fact_model_evaluation[is_champion_row] = TRUE()))
+		formatString: 0.0000
+		displayFolder: Model
+		lineageTag: a6c2b064-5d23-4542-94bc-4e6659d26257
+
+	measure KS = IF(HASONEVALUE(dim_split[dataset_split]), CALCULATE(MAX(fact_model_evaluation[value]), fact_model_evaluation[metric] = "ks", fact_model_evaluation[is_champion_row] = TRUE()))
+		formatString: 0.000
+		displayFolder: Model
+		lineageTag: a13e395e-4c4f-4477-92db-0bb702fcd718
+
+	measure 'Recall at Threshold' = IF(HASONEVALUE(dim_split[dataset_split]), CALCULATE(MAX(fact_model_evaluation[value]), fact_model_evaluation[metric] = "recall_at_threshold", fact_model_evaluation[is_champion_row] = TRUE()))
+		formatString: 0.0%
+		displayFolder: Model
+		lineageTag: ddfe787c-0519-4e26-8ece-a48dd3e60106
+
+	measure 'Precision at Threshold' = IF(HASONEVALUE(dim_split[dataset_split]), CALCULATE(MAX(fact_model_evaluation[value]), fact_model_evaluation[metric] = "precision_at_threshold", fact_model_evaluation[is_champion_row] = TRUE()))
+		formatString: 0.0%
+		displayFolder: Model
+		lineageTag: fef43571-71d0-480e-8926-0a6519028f91
+
+	measure 'Calibration in the Large' = IF(HASONEVALUE(dim_split[dataset_split]), CALCULATE(MAX(fact_model_evaluation[value]), fact_model_evaluation[metric] = "calibration_in_the_large", fact_model_evaluation[is_champion_row] = TRUE()))
+		formatString: +0.00%;-0.00%
+		displayFolder: Model
+		lineageTag: 06c884fc-2132-40bd-8cd6-b730bc41a823
+
+	measure 'Selected Threshold' = MAX(dim_model_version[selected_threshold])
+		formatString: 0.00%
+		displayFolder: Model
+		lineageTag: 353a8983-58fc-4ac8-92b8-9defc431b536
+
+	measure 'ROC True Positive Rate' = CALCULATE(AVERAGE(fact_model_curve[y]), fact_model_curve[curve] = "roc")
+		formatString: 0.000
+		displayFolder: Model
+		lineageTag: 37be757f-8bb3-4a68-94e4-d31911320942
+
+	measure 'Random Classifier' = CALCULATE(AVERAGE(fact_model_curve[x]), fact_model_curve[curve] = "roc")
+		formatString: 0.000
+		displayFolder: Model
+		lineageTag: 2d8de56b-434d-4ca0-878c-ebd349b34473
+
+	measure 'PR Precision' = CALCULATE(AVERAGE(fact_model_curve[y]), fact_model_curve[curve] = "pr")
+		formatString: 0.000
+		displayFolder: Model
+		lineageTag: 79573e9f-2ed8-49cc-9457-c5a364316798
+
+	measure 'Calibration Mean PD' = CALCULATE(AVERAGE(fact_calibration[mean_pd]), fact_calibration[score_type] = "calibrated")
+		formatString: 0.00%
+		displayFolder: Model
+		lineageTag: 6512d6c3-ea6e-40bd-b189-55aa37334e2c
+
+	measure 'Calibration Observed Rate' = CALCULATE(AVERAGE(fact_calibration[observed_rate]), fact_calibration[score_type] = "calibrated")
+		formatString: 0.00%
+		displayFolder: Model
+		lineageTag: 52122fd6-c7a0-49e1-97d4-b6dadbb59c16
+
+	measure 'Raw Score Mean PD' = CALCULATE(AVERAGE(fact_calibration[mean_pd]), fact_calibration[score_type] = "raw")
+		formatString: 0.00%
+		displayFolder: Model
+		lineageTag: 4a00e2e6-7a53-4c37-bfe4-d142326f6fb6
+
+	measure 'Calibration Bin Customers' = CALCULATE(SUM(fact_calibration[customers]), fact_calibration[score_type] = "calibrated")
+		formatString: #,0
+		displayFolder: Model
+		lineageTag: c957e3c5-12b7-4a4f-84bd-70bf55deab4a
+
+	measure 'Confusion Count' = SUM(fact_confusion_matrix[customers])
+		formatString: #,0
+		displayFolder: Model
+		lineageTag: d0040049-ae4b-4c5f-9f51-aa53911ecb63
+
+	measure 'Decile Lift' = AVERAGE(fact_lift[lift])
+		formatString: 0.00
+		displayFolder: Model
+		lineageTag: 240440c5-7601-49a0-9a7d-66892d864f31
+
+	measure 'Cumulative Capture' = AVERAGE(fact_lift[cum_capture_rate])
+		formatString: 0.0%
+		displayFolder: Model
+		lineageTag: 1f2f7c08-d098-4876-b033-74b9e24fa4ae
+
+	measure 'Cumulative Exposure Capture' = AVERAGE(fact_lift[cum_bad_exposure_capture])
+		formatString: 0.0%
+		displayFolder: Model
+		lineageTag: 7d031996-b23e-45b6-9eba-394e13cc2b78
+
+	measure 'Top 15 Mean abs SHAP' = IF(MAX(fact_feature_importance[importance_rank]) <= 15, SUM(fact_feature_importance[mean_abs_shap]))
+		formatString: 0.0000
+		displayFolder: Model
+		lineageTag: 2040b6ce-f61e-4f68-a269-fc169e006af0
+
+	measure 'Model Summary Narrative' = SELECTEDVALUE(dim_split[split_label], "Select one split") & ": AUC " & FORMAT([ROC-AUC], "0.000") & " · PR-AUC " & FORMAT([PR-AUC], "0.000") & " · KS " & FORMAT([KS], "0.000") & " · mean PD − observed " & FORMAT([Calibration in the Large], "+0.00%;-0.00%") & " · @thr " & FORMAT([Selected Threshold], "0.0%") & " recall " & FORMAT([Recall at Threshold], "0.0%") & ", precision " & FORMAT([Precision at Threshold], "0.0%") & " (proxy PD; associations, not causes)"
+		displayFolder: Narrative
+		lineageTag: 3e841353-e34c-4c2f-bfeb-33b0ad1d5416
+
+	/// Relative multiplier: +20% means PD x 1.2 (not +20 percentage points)
+	measure 'PD Stress Multiplier' = 1 + SELECTEDVALUE('PD Stress'[PD Stress Value], 0)
+		formatString: 0.00x
+		displayFolder: Scenario
+		lineageTag: 102d6512-ca54-4138-98d9-f7c87602ca65
+
+	/// Assumed LGD (no observed recoveries in the data)
+	measure 'Selected LGD' = SELECTEDVALUE('LGD Assumption'[LGD Assumption Value], 0.45)
+		formatString: 0.0%
+		displayFolder: Scenario
+		lineageTag: 14bfb461-e38e-460b-a20e-50e2c8d994f6
+
+	measure 'Exposure Multiplier' = 1 + SELECTEDVALUE('Exposure Change'[Exposure Change Value], 0)
+		formatString: 0.00x
+		displayFolder: Scenario
+		lineageTag: 9760d9cc-06a5-425b-9c8a-e71f5a6d04ed
+
+	measure 'Scenario Expected Loss' = VAR s = [PD Stress Multiplier] VAR l = [Selected LGD] VAR x = [Exposure Multiplier] RETURN SUMX(fact_customer_risk, MIN(1, fact_customer_risk[predicted_pd] * s) * fact_customer_risk[exposure_proxy] * x * l)
+		formatString: #,0
+		displayFolder: Scenario
+		lineageTag: b38db357-f905-4892-b6f9-013a2859240f
+
+	measure 'Scenario EL Change' = [Scenario Expected Loss] - [Base Expected Loss]
+		formatString: #,0
+		displayFolder: Scenario
+		lineageTag: dea79cd6-8d46-4c12-a070-892b8ce2cd0b
+
+	measure 'Scenario EL Change %' = DIVIDE([Scenario EL Change], [Base Expected Loss])
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: Scenario
+		lineageTag: aa3a5263-1853-4a83-98f5-40398276ff23
+
+	measure 'Scenario Exposure' = [Total Exposure] * [Exposure Multiplier]
+		formatString: #,0
+		displayFolder: Scenario
+		lineageTag: bf008a47-39bc-40a0-b7f6-80801e24e46b
+
+	measure 'Scenario EL Rate' = DIVIDE([Scenario Expected Loss], [Scenario Exposure])
+		formatString: 0.00%
+		displayFolder: Scenario
+		lineageTag: 5a025ea7-8d9e-4489-9faf-cbad5a140d94
+
+	measure 'Scenario EL Share %' = DIVIDE([Scenario Expected Loss], CALCULATE([Scenario Expected Loss], ALLSELECTED(fact_customer_risk)))
+		formatString: 0.0%
+		displayFolder: Scenario
+		lineageTag: 571ed1a8-ca8b-4fd2-ab8c-c0bd3c5a4374
+
+	measure 'EL Bridge Value' = VAR s = [PD Stress Multiplier] VAR l = [Selected LGD] VAR x = [Exposure Multiplier] VAR el0 = [Base Expected Loss] VAR el1 = SUMX(fact_customer_risk, MIN(1, fact_customer_risk[predicted_pd] * s) * fact_customer_risk[exposure_proxy] * fact_customer_risk[base_lgd]) VAR el2 = SUMX(fact_customer_risk, MIN(1, fact_customer_risk[predicted_pd] * s) * fact_customer_risk[exposure_proxy] * l) VAR el3 = el2 * x RETURN SWITCH(SELECTEDVALUE('EL Bridge'[Step Order]), 1, el0, 2, el1 - el0, 3, el2 - el1, 4, el3 - el2)
+		formatString: #,0
+		displayFolder: Scenario
+		lineageTag: 3ee581c1-e4ae-428d-aae6-82e8e9444eeb
+
+	measure 'Sensitivity EL' = VAR s = SELECTEDVALUE('Sensitivity PD'[PD Stress Level], 0) VAR l = SELECTEDVALUE('Sensitivity LGD'[LGD Level], 0.45) RETURN SUMX(fact_customer_risk, MIN(1, fact_customer_risk[predicted_pd] * (1 + s)) * fact_customer_risk[exposure_proxy] * l)
+		formatString: #,0
+		displayFolder: Scenario
+		lineageTag: eb47914f-60a0-4192-8960-b9b2d547e701
+
+	measure 'Header Info' = IF(SELECTEDVALUE(report_metadata[is_synthetic], FALSE()), "SYNTHETIC TEST DATA (not Home Credit) · ", "") & "Population " & FORMAT(MAX(report_metadata[population_customers]), "#,0") & " applications · Model " & MAX(report_metadata[model_version]) & " · Refreshed " & FORMAT(MAX(report_metadata[last_refreshed]), "yyyy-mm-dd hh:nn") & " UTC"
+		displayFolder: Metadata
+		lineageTag: d894fa74-9cd1-435f-8490-0c6e6d6b19cd
+
+	measure 'Grade Color' = SELECTEDVALUE(dim_risk_grade[color_hex], "#5B6B7F")
+		displayFolder: Metadata
+		lineageTag: 0ae57c1e-d08b-45c3-9c36-90384bdc36f8
+
+	partition '00_Measures' = m
+		mode: import
+		source =
+				let
+				    Source = #table(type table [Placeholder = text], {}),
+				    #"Removed placeholder" = Table.RemoveColumns(Source, {"Placeholder"})
+				in
+				    #"Removed placeholder"
+
+	annotation PBI_ResultType = Table

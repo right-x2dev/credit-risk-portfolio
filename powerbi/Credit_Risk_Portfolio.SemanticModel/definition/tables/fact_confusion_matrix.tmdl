@@ -1,0 +1,85 @@
+table fact_confusion_matrix
+	lineageTag: 2b7c212a-f960-4c15-8776-78aa24b6917b
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: f5c4d53d-4f90-4db6-b6d6-8898bc668d88
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column dataset_split
+		dataType: string
+		lineageTag: def63b8d-dc2b-4fa4-ae9b-39f89d18e35c
+		summarizeBy: none
+		sourceColumn: dataset_split
+
+		annotation SummarizationSetBy = User
+
+	column actual
+		dataType: string
+		lineageTag: cea7e93e-eec7-47bb-86cc-1da73ba3d3d9
+		summarizeBy: none
+		sourceColumn: actual
+		sortByColumn: actual_sort
+
+		annotation SummarizationSetBy = User
+
+	column actual_sort
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: b9fdaaf2-c620-4435-9f7a-3f47ad62203b
+		summarizeBy: none
+		sourceColumn: actual_sort
+
+		annotation SummarizationSetBy = User
+
+	column predicted
+		dataType: string
+		lineageTag: 0c8f3dd6-b186-42ca-8204-e7079ebba5bf
+		summarizeBy: none
+		sourceColumn: predicted
+		sortByColumn: predicted_sort
+
+		annotation SummarizationSetBy = User
+
+	column predicted_sort
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 1f2ced4d-63ab-4982-9e85-c1c93ed9cebe
+		summarizeBy: none
+		sourceColumn: predicted_sort
+
+		annotation SummarizationSetBy = User
+
+	column customers
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 243e2698-bfee-4080-a6b1-3beabf1fcafd
+		summarizeBy: sum
+		sourceColumn: customers
+
+		annotation SummarizationSetBy = User
+
+	partition fact_confusion_matrix = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_confusion_matrix"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_confusion_matrix.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Typed columns" = Table.TransformColumnTypes(Source, {{"model_version_key", Int64.Type}, {"dataset_split", type text}, {"actual", type text}, {"actual_sort", Int64.Type}, {"predicted", type text}, {"predicted_sort", Int64.Type}, {"customers", type number}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

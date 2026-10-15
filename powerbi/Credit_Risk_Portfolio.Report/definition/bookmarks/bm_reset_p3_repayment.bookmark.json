@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/1.4.0/schema.json",
+  "displayName": "Reset filters",
+  "name": "bm_reset_p3_repayment",
+  "options": {
+    "suppressActiveSection": true,
+    "suppressDisplay": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "p3_repayment",
+    "sections": {
+      "p3_repayment": {
+        "visualContainers": {}
+      }
+    }
+  }
+}

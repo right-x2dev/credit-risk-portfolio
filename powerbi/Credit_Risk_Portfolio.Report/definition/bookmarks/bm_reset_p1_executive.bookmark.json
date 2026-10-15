@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/1.4.0/schema.json",
+  "displayName": "Reset filters",
+  "name": "bm_reset_p1_executive",
+  "options": {
+    "suppressActiveSection": true,
+    "suppressDisplay": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "p1_executive",
+    "sections": {
+      "p1_executive": {
+        "visualContainers": {
+          "p1_executive_s_grade": {
+            "filters": {
+              "byExpr": []
+            }
+          },
+          "p1_executive_s_income": {
+            "filters": {
+              "byExpr": []
+            }
+          },
+          "p1_executive_s_age": {
+            "filters": {
+              "byExpr": []
+            }
+          },
+          "p1_executive_s_gender": {
+            "filters": {
+              "byExpr": []
+            }
+          },
+          "p1_executive_s_contract": {
+            "filters": {
+              "byExpr": []
+            }
+          },
+          "p1_executive_s_housing": {
+            "filters": {
+              "byExpr": []
+            }
+          },
+          "p1_executive_s_occ": {
+            "filters": {
+              "byExpr": []
+            }
+          },
+          "p1_executive_s_family": {
+            "filters": {
+              "byExpr": []
+            }
+          }
+        }
+      }
+    }
+  }
+}

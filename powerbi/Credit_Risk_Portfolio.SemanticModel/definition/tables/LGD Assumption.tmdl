@@ -1,0 +1,17 @@
+table 'LGD Assumption'
+	lineageTag: 5bfe9e5e-7832-46c3-864c-bd0179d38ed2
+
+	column 'LGD Assumption Value'
+		dataType: double
+		formatString: 0%
+		lineageTag: 03dd7807-8640-43ba-a3bc-d86d2ea80617
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition 'LGD Assumption' = calculated
+		mode: import
+		source = GENERATESERIES(0.1, 0.9, 0.05)
+
+	annotation PBI_ResultType = Table

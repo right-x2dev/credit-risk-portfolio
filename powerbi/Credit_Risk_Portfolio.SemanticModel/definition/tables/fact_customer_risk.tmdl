@@ -1,0 +1,591 @@
+table fact_customer_risk
+	lineageTag: f3b14c09-cf8c-415d-b6c6-fd66982c6beb
+
+	column sk_id_curr
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 659799b6-a062-48a3-bd47-074ce567842a
+		summarizeBy: none
+		sourceColumn: sk_id_curr
+
+		annotation SummarizationSetBy = User
+
+	column segment_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: e552690a-9782-4840-a606-38cc4b19e5a2
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	column risk_grade_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: b4d8b05c-be3d-422f-bcf9-6f37b4ccd989
+		summarizeBy: none
+		sourceColumn: risk_grade_key
+
+		annotation SummarizationSetBy = User
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 798d594a-5312-4cc8-9ee9-d22d25dd1640
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column dataset_split
+		dataType: string
+		lineageTag: 5b615319-1397-4be6-bf5f-b9d2f9ed9ae3
+		summarizeBy: none
+		sourceColumn: dataset_split
+
+		annotation SummarizationSetBy = User
+
+	column target
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a759e42-93d8-4bf2-bb25-ee39a225e8c8
+		summarizeBy: none
+		sourceColumn: target
+
+		annotation SummarizationSetBy = User
+
+	column predicted_pd_raw
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 89d0e8bd-7998-4deb-a100-15bd6ed7161c
+		summarizeBy: none
+		sourceColumn: predicted_pd_raw
+
+		annotation SummarizationSetBy = User
+
+	column predicted_pd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: fe8791f5-6542-46ee-80c0-c4e1f164fca3
+		summarizeBy: none
+		sourceColumn: predicted_pd
+
+		annotation SummarizationSetBy = User
+
+	column pd_bucket_pct
+		dataType: int64
+		formatString: 0
+		lineageTag: a4255fe8-55e6-443f-b424-7e0bdc4b2ace
+		summarizeBy: none
+		sourceColumn: pd_bucket_pct
+
+		annotation SummarizationSetBy = User
+
+	column exposure_proxy
+		dataType: double
+		formatString: #,0
+		lineageTag: 489f7988-f7ae-497c-9183-7e7327099a69
+		summarizeBy: none
+		sourceColumn: exposure_proxy
+
+		annotation SummarizationSetBy = User
+
+	column base_lgd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 17418a30-0e78-4f8d-b6a2-1acf89a468fd
+		summarizeBy: none
+		sourceColumn: base_lgd
+
+		annotation SummarizationSetBy = User
+
+	column expected_loss
+		dataType: double
+		formatString: #,0
+		lineageTag: 62402fc2-f5eb-4327-85c2-54cbd774cdee
+		summarizeBy: none
+		sourceColumn: expected_loss
+
+		annotation SummarizationSetBy = User
+
+	column amt_income_total
+		dataType: double
+		formatString: #,0
+		lineageTag: c168f7dd-8ec2-45b0-a4d5-4fb64256d3c0
+		summarizeBy: none
+		sourceColumn: amt_income_total
+
+		annotation SummarizationSetBy = User
+
+	column amt_annuity
+		dataType: double
+		formatString: #,0
+		lineageTag: 3468245a-f789-427a-b27f-c59ee574a65a
+		summarizeBy: none
+		sourceColumn: amt_annuity
+
+		annotation SummarizationSetBy = User
+
+	column amt_goods_price
+		dataType: double
+		formatString: #,0
+		lineageTag: c25060bf-203c-45c9-b44c-d85eb7a525dc
+		summarizeBy: none
+		sourceColumn: amt_goods_price
+
+		annotation SummarizationSetBy = User
+
+	column credit_income_ratio
+		dataType: double
+		formatString: 0.00%
+		lineageTag: e6ddb82e-927a-47c5-9d46-e7b4611df468
+		summarizeBy: none
+		sourceColumn: credit_income_ratio
+
+		annotation SummarizationSetBy = User
+
+	column annuity_income_ratio
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 58db9121-6b45-4957-a0fc-350c2a42b51b
+		summarizeBy: none
+		sourceColumn: annuity_income_ratio
+
+		annotation SummarizationSetBy = User
+
+	column ext_source_mean
+		dataType: double
+		formatString: 0.0000
+		lineageTag: ce9cfe1a-4725-4da1-8a95-98f1f86d5073
+		summarizeBy: none
+		sourceColumn: ext_source_mean
+
+		annotation SummarizationSetBy = User
+
+	column age_years
+		dataType: double
+		formatString: 0.0000
+		lineageTag: b9f43dcc-f89a-4551-8073-7d7f8b10e779
+		summarizeBy: none
+		sourceColumn: age_years
+
+		annotation SummarizationSetBy = User
+
+	column employment_years
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 7dc9a571-1dfe-4e1d-836b-7f597a3abad4
+		summarizeBy: none
+		sourceColumn: employment_years
+
+		annotation SummarizationSetBy = User
+
+	column has_installments
+		dataType: int64
+		formatString: 0
+		lineageTag: 74e478ae-c708-4ad0-98bc-83f269ac7690
+		summarizeBy: none
+		sourceColumn: has_installments
+
+		annotation SummarizationSetBy = User
+
+	column has_bureau
+		dataType: int64
+		formatString: 0
+		lineageTag: 614332f1-7cc1-4efb-bf0a-e2725517dc7b
+		summarizeBy: none
+		sourceColumn: has_bureau
+
+		annotation SummarizationSetBy = User
+
+	column has_previous
+		dataType: int64
+		formatString: 0
+		lineageTag: d04b1bd0-2091-4294-8faf-6b00adf0fd7c
+		summarizeBy: none
+		sourceColumn: has_previous
+
+		annotation SummarizationSetBy = User
+
+	column has_credit_card
+		dataType: int64
+		formatString: 0
+		lineageTag: b837e8e1-3d99-4df4-8057-513cc210f2e8
+		summarizeBy: none
+		sourceColumn: has_credit_card
+
+		annotation SummarizationSetBy = User
+
+	column has_pos_cash
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e2f3515-8951-4a84-9c49-7e656d9dd9cc
+		summarizeBy: none
+		sourceColumn: has_pos_cash
+
+		annotation SummarizationSetBy = User
+
+	column inst_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 659d126d-2ecb-4a3f-a692-c81a12dcf462
+		summarizeBy: none
+		sourceColumn: inst_count
+
+		annotation SummarizationSetBy = User
+
+	column inst_late_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 6be5b723-f556-45f8-95eb-da6ba51ee880
+		summarizeBy: none
+		sourceColumn: inst_late_count
+
+		annotation SummarizationSetBy = User
+
+	column inst_late_ratio
+		dataType: double
+		formatString: 0.00%
+		lineageTag: d9fdfc67-e3e9-4148-a431-c9cd786b369a
+		summarizeBy: none
+		sourceColumn: inst_late_ratio
+
+		annotation SummarizationSetBy = User
+
+	column inst_dpd_mean
+		dataType: double
+		formatString: 0.00%
+		lineageTag: e183fabb-85f8-49ce-9185-5a2da488d270
+		summarizeBy: none
+		sourceColumn: inst_dpd_mean
+
+		annotation SummarizationSetBy = User
+
+	column inst_dpd_max
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 47eef7ef-7cbb-44f4-849a-1a76842826cb
+		summarizeBy: none
+		sourceColumn: inst_dpd_max
+
+		annotation SummarizationSetBy = User
+
+	column inst_severe_late_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 9deaa3cd-8b6f-4073-885e-bb2802998528
+		summarizeBy: none
+		sourceColumn: inst_severe_late_count
+
+		annotation SummarizationSetBy = User
+
+	column inst_payment_ratio_mean
+		dataType: double
+		formatString: 0.00%
+		lineageTag: afffdabe-98f3-4e17-995e-7e59029e0bcf
+		summarizeBy: none
+		sourceColumn: inst_payment_ratio_mean
+
+		annotation SummarizationSetBy = User
+
+	column inst_underpaid_ratio
+		dataType: double
+		formatString: 0.00%
+		lineageTag: bf338b53-c925-441b-97ce-74db41dabc68
+		summarizeBy: none
+		sourceColumn: inst_underpaid_ratio
+
+		annotation SummarizationSetBy = User
+
+	column pos_dpd_max
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 4921b8f8-b6b6-41b9-b9e4-b27871cf9877
+		summarizeBy: none
+		sourceColumn: pos_dpd_max
+
+		annotation SummarizationSetBy = User
+
+	column cc_utilization_mean
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 426a4ef1-ea4d-46a4-b58e-c9d7dfa2ccc6
+		summarizeBy: none
+		sourceColumn: cc_utilization_mean
+
+		annotation SummarizationSetBy = User
+
+	column cc_dpd_max
+		dataType: double
+		formatString: 0.00%
+		lineageTag: d32cf203-149d-464e-8ecd-bb9587bc2769
+		summarizeBy: none
+		sourceColumn: cc_dpd_max
+
+		annotation SummarizationSetBy = User
+
+	column bur_count
+		dataType: int64
+		formatString: 0
+		lineageTag: b43f077f-bfe1-41fd-b753-82e0bb40cfbd
+		summarizeBy: none
+		sourceColumn: bur_count
+
+		annotation SummarizationSetBy = User
+
+	column bur_active_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 932bc3a0-213b-4e87-836d-29e9a4f855f3
+		summarizeBy: none
+		sourceColumn: bur_active_count
+
+		annotation SummarizationSetBy = User
+
+	column bur_active_debt_credit_ratio
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 751a9825-cc88-4e6d-80cf-f8f42e1ca71f
+		summarizeBy: none
+		sourceColumn: bur_active_debt_credit_ratio
+
+		annotation SummarizationSetBy = User
+
+	column bur_bb_worst_status
+		dataType: int64
+		formatString: 0
+		lineageTag: 4f3a2152-a836-4b99-a152-ff903d60e0f8
+		summarizeBy: none
+		sourceColumn: bur_bb_worst_status
+
+		annotation SummarizationSetBy = User
+
+	column bur_overdue_now_count
+		dataType: int64
+		formatString: 0
+		lineageTag: adcc8bb0-154d-4545-aff5-5f5b413b3bea
+		summarizeBy: none
+		sourceColumn: bur_overdue_now_count
+
+		annotation SummarizationSetBy = User
+
+	column prev_count
+		dataType: int64
+		formatString: 0
+		lineageTag: faca6022-bcf5-4730-8af4-68f9dfa87608
+		summarizeBy: none
+		sourceColumn: prev_count
+
+		annotation SummarizationSetBy = User
+
+	column prev_approved_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 472ea4cc-b14c-45ef-a8bf-8bb2b275b77e
+		summarizeBy: none
+		sourceColumn: prev_approved_count
+
+		annotation SummarizationSetBy = User
+
+	column prev_refused_count
+		dataType: int64
+		formatString: 0
+		lineageTag: 61c2e57a-296d-4d28-866a-c637778852f0
+		summarizeBy: none
+		sourceColumn: prev_refused_count
+
+		annotation SummarizationSetBy = User
+
+	column prev_last_status
+		dataType: string
+		lineageTag: 922a6b41-babf-46f0-b3a3-67b7f21758ac
+		summarizeBy: none
+		sourceColumn: prev_last_status
+
+		annotation SummarizationSetBy = User
+
+	column is_past_due_history
+		dataType: int64
+		formatString: 0
+		lineageTag: dafa125d-ab47-463a-9114-026f1035e11b
+		summarizeBy: none
+		sourceColumn: is_past_due_history
+
+		annotation SummarizationSetBy = User
+
+	column is_severe_delinquency
+		dataType: int64
+		formatString: 0
+		lineageTag: 13b598aa-9096-475b-b3c9-7745dd67ec44
+		summarizeBy: none
+		sourceColumn: is_severe_delinquency
+
+		annotation SummarizationSetBy = User
+
+	column max_dpd_band
+		dataType: string
+		lineageTag: 1905538e-7348-4d48-a51c-2d23ccb82ee1
+		summarizeBy: none
+		sourceColumn: max_dpd_band
+		sortByColumn: max_dpd_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column max_dpd_band_sort
+		dataType: int64
+		formatString: 0.00%
+		isHidden
+		lineageTag: aa652b1c-a19e-4574-8f1c-d76ac950832f
+		summarizeBy: none
+		sourceColumn: max_dpd_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column payment_ratio_band
+		dataType: string
+		lineageTag: dba0cead-beb7-4dd1-8a6a-37688805f0d0
+		summarizeBy: none
+		sourceColumn: payment_ratio_band
+		sortByColumn: payment_ratio_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column payment_ratio_band_sort
+		dataType: int64
+		formatString: 0.00%
+		isHidden
+		lineageTag: c5d3d069-2f15-4127-9a91-9eadeb596a03
+		summarizeBy: none
+		sourceColumn: payment_ratio_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column utilization_band
+		dataType: string
+		lineageTag: 356ddc8a-f56e-407a-856c-8ed3322609b4
+		summarizeBy: none
+		sourceColumn: utilization_band
+		sortByColumn: utilization_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column utilization_band_sort
+		dataType: int64
+		formatString: 0.00%
+		isHidden
+		lineageTag: f40171c8-75be-49a8-9b30-3f26146828ca
+		summarizeBy: none
+		sourceColumn: utilization_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column bureau_active_band
+		dataType: string
+		lineageTag: 8a1a2587-87a5-4a5e-a10c-ea3fb47e500a
+		summarizeBy: none
+		sourceColumn: bureau_active_band
+		sortByColumn: bureau_active_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column bureau_active_band_sort
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: fdd1f397-2ce1-4d4b-b08a-db7e96e95cf1
+		summarizeBy: none
+		sourceColumn: bureau_active_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column bureau_debt_ratio_band
+		dataType: string
+		lineageTag: d7ebdd5f-a35f-4630-96f0-8fb80b4c85e6
+		summarizeBy: none
+		sourceColumn: bureau_debt_ratio_band
+		sortByColumn: bureau_debt_ratio_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column bureau_debt_ratio_band_sort
+		dataType: int64
+		formatString: 0.00%
+		isHidden
+		lineageTag: 04986d38-aa36-47c9-8bfc-f95361635602
+		summarizeBy: none
+		sourceColumn: bureau_debt_ratio_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column prev_outcome_group
+		dataType: string
+		lineageTag: fe9eaa2e-a1f6-4cea-990f-d726a3fa9c5a
+		summarizeBy: none
+		sourceColumn: prev_outcome_group
+		sortByColumn: prev_outcome_group_sort
+
+		annotation SummarizationSetBy = User
+
+	column prev_outcome_group_sort
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: fbcd947a-bcdc-434f-85bb-628f997d7505
+		summarizeBy: none
+		sourceColumn: prev_outcome_group_sort
+
+		annotation SummarizationSetBy = User
+
+	column reason_1
+		dataType: string
+		lineageTag: e942e59c-097f-4a54-8634-1a7766b48786
+		summarizeBy: none
+		sourceColumn: reason_1
+
+		annotation SummarizationSetBy = User
+
+	column reason_2
+		dataType: string
+		lineageTag: 1f5665e9-0509-4bfb-85bf-fbe58a6cb76f
+		summarizeBy: none
+		sourceColumn: reason_2
+
+		annotation SummarizationSetBy = User
+
+	column reason_3
+		dataType: string
+		lineageTag: e99df22a-bb14-47d4-90a8-cef8b79ead9a
+		summarizeBy: none
+		sourceColumn: reason_3
+
+		annotation SummarizationSetBy = User
+
+	column score_date
+		dataType: dateTime
+		lineageTag: 98bff517-b819-431f-8c96-15ba4eb985f4
+		summarizeBy: none
+		sourceColumn: score_date
+
+		annotation SummarizationSetBy = User
+
+	partition fact_customer_risk = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_customer_risk"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_customer_risk.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Typed columns" = Table.TransformColumnTypes(Source, {{"sk_id_curr", Int64.Type}, {"segment_key", Int64.Type}, {"risk_grade_key", Int64.Type}, {"model_version_key", Int64.Type}, {"dataset_split", type text}, {"target", Int64.Type}, {"predicted_pd_raw", type number}, {"predicted_pd", type number}, {"pd_bucket_pct", Int64.Type}, {"exposure_proxy", type number}, {"base_lgd", type number}, {"expected_loss", type number}, {"amt_income_total", type number}, {"amt_annuity", type number}, {"amt_goods_price", type number}, {"credit_income_ratio", type number}, {"annuity_income_ratio", type number}, {"ext_source_mean", type number}, {"age_years", type number}, {"employment_years", type number}, {"has_installments", Int64.Type}, {"has_bureau", Int64.Type}, {"has_previous", Int64.Type}, {"has_credit_card", Int64.Type}, {"has_pos_cash", Int64.Type}, {"inst_count", Int64.Type}, {"inst_late_count", Int64.Type}, {"inst_late_ratio", type number}, {"inst_dpd_mean", type number}, {"inst_dpd_max", type number}, {"inst_severe_late_count", Int64.Type}, {"inst_payment_ratio_mean", type number}, {"inst_underpaid_ratio", type number}, {"pos_dpd_max", type number}, {"cc_utilization_mean", type number}, {"cc_dpd_max", type number}, {"bur_count", Int64.Type}, {"bur_active_count", Int64.Type}, {"bur_active_debt_credit_ratio", type number}, {"bur_bb_worst_status", Int64.Type}, {"bur_overdue_now_count", Int64.Type}, {"prev_count", Int64.Type}, {"prev_approved_count", Int64.Type}, {"prev_refused_count", Int64.Type}, {"prev_last_status", type text}, {"is_past_due_history", Int64.Type}, {"is_severe_delinquency", Int64.Type}, {"max_dpd_band", type text}, {"max_dpd_band_sort", Int64.Type}, {"payment_ratio_band", type text}, {"payment_ratio_band_sort", Int64.Type}, {"utilization_band", type text}, {"utilization_band_sort", Int64.Type}, {"bureau_active_band", type text}, {"bureau_active_band_sort", Int64.Type}, {"bureau_debt_ratio_band", type text}, {"bureau_debt_ratio_band_sort", Int64.Type}, {"prev_outcome_group", type text}, {"prev_outcome_group_sort", Int64.Type}, {"reason_1", type text}, {"reason_2", type text}, {"reason_3", type text}, {"score_date", type date}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

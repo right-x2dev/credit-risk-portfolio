@@ -1,0 +1,26 @@
+table 'EL Bridge'
+	lineageTag: 39a0ad1d-6d8e-4f55-8462-10948df1bde3
+
+	column Step
+		dataType: string
+		lineageTag: 52c71466-10e2-47cd-8eb2-7b459729196f
+		summarizeBy: none
+		sourceColumn: [Step]
+		sortByColumn: 'Step Order'
+
+		annotation SummarizationSetBy = User
+
+	column 'Step Order'
+		dataType: int64
+		isHidden
+		lineageTag: 0f442e12-f611-4541-a603-d2fa892e8749
+		summarizeBy: none
+		sourceColumn: [Step Order]
+
+		annotation SummarizationSetBy = User
+
+	partition 'EL Bridge' = calculated
+		mode: import
+		source = DATATABLE("Step", STRING, "Step Order", INTEGER, {{"1 Base EL", 1}, {"2 PD stress", 2}, {"3 LGD change", 3}, {"4 Exposure change", 4}})
+
+	annotation PBI_ResultType = Table

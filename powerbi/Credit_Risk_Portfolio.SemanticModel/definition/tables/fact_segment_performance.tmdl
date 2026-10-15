@@ -1,0 +1,144 @@
+table fact_segment_performance
+	lineageTag: 62c01546-874a-408a-92a8-65f5592497de
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 3c1c8bc5-6a99-4305-b915-192d38145aac
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column dataset_split
+		dataType: string
+		lineageTag: 71df3c86-2092-4deb-8192-a3c6149880bb
+		summarizeBy: none
+		sourceColumn: dataset_split
+
+		annotation SummarizationSetBy = User
+
+	column group_attribute
+		dataType: string
+		lineageTag: bc0db381-7a4a-4d48-a88a-1cb0f1adf4b5
+		summarizeBy: none
+		sourceColumn: group_attribute
+
+		annotation SummarizationSetBy = User
+
+	column group_value
+		dataType: string
+		lineageTag: 6d1b33c5-e28a-41aa-ad92-86872288cd33
+		summarizeBy: none
+		sourceColumn: group_value
+
+		annotation SummarizationSetBy = User
+
+	column customers
+		dataType: int64
+		formatString: 0
+		lineageTag: 09e750d1-1468-49d0-8dbe-6713418864e8
+		summarizeBy: sum
+		sourceColumn: customers
+
+		annotation SummarizationSetBy = User
+
+	column positives
+		dataType: int64
+		formatString: 0
+		lineageTag: ab6c3def-83ff-4301-a18d-812b6f76b42c
+		summarizeBy: sum
+		sourceColumn: positives
+
+		annotation SummarizationSetBy = User
+
+	column observed_rate
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 9f8e8a13-4369-4668-bfd2-0dd6679fa470
+		summarizeBy: none
+		sourceColumn: observed_rate
+
+		annotation SummarizationSetBy = User
+
+	column mean_pd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: c7176f68-6502-448d-8aa2-9e5fb7e971ec
+		summarizeBy: none
+		sourceColumn: mean_pd
+
+		annotation SummarizationSetBy = User
+
+	column roc_auc
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 53fa47a6-aac0-44b1-b286-d642e3b1c616
+		summarizeBy: none
+		sourceColumn: roc_auc
+
+		annotation SummarizationSetBy = User
+
+	column recall_at_threshold
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 7f0edb6d-3b95-4ec2-90cf-7a6ce707d260
+		summarizeBy: none
+		sourceColumn: recall_at_threshold
+
+		annotation SummarizationSetBy = User
+
+	column precision_at_threshold
+		dataType: double
+		formatString: 0.00%
+		lineageTag: f270da69-d7d0-4f3f-b274-7027f6d15f65
+		summarizeBy: none
+		sourceColumn: precision_at_threshold
+
+		annotation SummarizationSetBy = User
+
+	column flagged_share
+		dataType: double
+		formatString: 0.00%
+		lineageTag: c8e23047-6311-44a4-9ae9-73bd2aff2748
+		summarizeBy: none
+		sourceColumn: flagged_share
+
+		annotation SummarizationSetBy = User
+
+	column exposure
+		dataType: double
+		formatString: #,0
+		lineageTag: 7ddd8187-dc68-4754-8bd3-935476e28737
+		summarizeBy: none
+		sourceColumn: exposure
+
+		annotation SummarizationSetBy = User
+
+	column small_sample_warning
+		dataType: boolean
+		lineageTag: 938af809-cdb0-4bb6-a95a-4b1e820e3d51
+		summarizeBy: none
+		sourceColumn: small_sample_warning
+
+		annotation SummarizationSetBy = User
+
+	partition fact_segment_performance = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_segment_performance"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_segment_performance.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Parsed booleans" = if DataSource = "PostgreSQL" then Source else Table.TransformColumns(Source, {{"small_sample_warning", each if _ = null then null else Text.Lower(_) = "true" or _ = "t"}}),
+				    #"Typed columns" = Table.TransformColumnTypes(#"Parsed booleans", {{"model_version_key", Int64.Type}, {"dataset_split", type text}, {"group_attribute", type text}, {"group_value", type text}, {"customers", Int64.Type}, {"positives", Int64.Type}, {"observed_rate", type number}, {"mean_pd", type number}, {"roc_auc", type number}, {"recall_at_threshold", type number}, {"precision_at_threshold", type number}, {"flagged_share", type number}, {"exposure", type number}, {"small_sample_warning", type logical}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

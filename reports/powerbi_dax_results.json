@@ -1,0 +1,523 @@
+﻿{
+    "table_states":  [
+                         {
+                             "table":  "dim_risk_grade",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "dim_model_version",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "dim_split",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "dim_customer_segment",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_customer_risk",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_scenario_base",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_model_evaluation",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_model_curve",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_calibration",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_lift",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_feature_importance",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_segment_performance",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "fact_confusion_matrix",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "report_metadata",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "00_Measures",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "PD Stress",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "LGD Assumption",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "Exposure Change",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "Sensitivity PD",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "Sensitivity LGD",
+                             "state":  "Ready",
+                             "error":  ""
+                         },
+                         {
+                             "table":  "EL Bridge",
+                             "state":  "Ready",
+                             "error":  ""
+                         }
+                     ],
+    "portfolio":  [
+                      {
+                          "total_customers":  30000,
+                          "total_exposure":  17506272500,
+                          "observed_difficulty_rate":  0.090533333333333327,
+                          "average_pd":  0.091588086152748008,
+                          "exposure_weighted_pd":  0.0909460341992836,
+                          "base_expected_loss":  716456725.86913967,
+                          "el_rate":  0.0409257153896776,
+                          "high_risk_customer_pct":  0.28683333333333333,
+                          "high_risk_exposure_pct":  0.28736591413163481,
+                          "risk_capture_exposure":  0.71195636086317027,
+                          "past_due_customer_pct":  0.73681379893204257,
+                          "severe_delinquency_customer_pct":  0.54135453881910034,
+                          "average_payment_ratio":  0.97605239514837294,
+                          "average_credit_utilization":  0.34356779924538683,
+                          "scenario_el_default":  716456725.86913967,
+                          "scenario_change_default":  0
+                      }
+                  ],
+    "by_grade":  [
+                     {
+                         "dim_risk_grade[risk_grade":  "High",
+                         "dim_risk_grade[sort_key":  3,
+                         "customers":  5682,
+                         "exposure":  3401503500,
+                         "base_expected_loss":  212769855.55963022,
+                         "average_pd":  0.13926411273220313,
+                         "observed_difficulty_rate":  0.13921154523055262
+                     },
+                     {
+                         "dim_risk_grade[risk_grade":  "Low",
+                         "dim_risk_grade[sort_key":  1,
+                         "customers":  11469,
+                         "exposure":  6572615000,
+                         "base_expected_loss":  103651927.64171878,
+                         "average_pd":  0.035099063036981591,
+                         "observed_difficulty_rate":  0.019356526288255297
+                     },
+                     {
+                         "dim_risk_grade[risk_grade":  "Medium",
+                         "dim_risk_grade[sort_key":  2,
+                         "customers":  9926,
+                         "exposure":  5902951500,
+                         "base_expected_loss":  185971448.14970359,
+                         "average_pd":  0.069925197615964774,
+                         "observed_difficulty_rate":  0.053697360467459196
+                     },
+                     {
+                         "dim_risk_grade[risk_grade":  "Critical",
+                         "dim_risk_grade[sort_key":  4,
+                         "customers":  2923,
+                         "exposure":  1629202500,
+                         "base_expected_loss":  214063494.51808578,
+                         "average_pd":  0.29412084520385146,
+                         "observed_difficulty_rate":  0.4002736914129319
+                     }
+                 ],
+    "grade_sum_check":  [
+                            {
+                                "sum_of_grades_el":  716456725.86913836,
+                                "total_el":  716456725.86914134,
+                                "sum_of_grades_customers":  30000
+                            }
+                        ],
+    "filtered_spot_check":  [
+                                {
+                                    "customers":  5759,
+                                    "exposure":  3398663000,
+                                    "ew_pd":  0.09476634000401693,
+                                    "el":  144935484.03768253
+                                }
+                            ],
+    "scenario_stress":  [
+                            {
+                                "scenario_el":  1146330761.3906198,
+                                "bridge_total":  1146330761.3906198
+                            }
+                        ],
+    "sensitivity":  [
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.1,
+                            "el":  127370084.59895855
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.1,
+                            "el":  159212605.74869761
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.1,
+                            "el":  191055126.89843717
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.1,
+                            "el":  222897648.04817581
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.1,
+                            "el":  254739860.81715566
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.1,
+                            "el":  286551644.09124517
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.1,
+                            "el":  318207672.43163878
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.2,
+                            "el":  254740169.1979171
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.2,
+                            "el":  318425211.49739522
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.2,
+                            "el":  382110253.79687434
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.2,
+                            "el":  445795296.09635162
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.2,
+                            "el":  509479721.63431132
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.2,
+                            "el":  573103288.18249035
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.2,
+                            "el":  636415344.86327755
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.30000000000000004,
+                            "el":  382110253.79687446
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.30000000000000004,
+                            "el":  477637817.24609011
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.30000000000000004,
+                            "el":  573165380.69531059
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.30000000000000004,
+                            "el":  668692944.144527
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.30000000000000004,
+                            "el":  764219582.45146453
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.30000000000000004,
+                            "el":  859654932.27374232
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.30000000000000004,
+                            "el":  954623017.29491067
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.4,
+                            "el":  509480338.39583421
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.4,
+                            "el":  636850422.99479043
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.4,
+                            "el":  764220507.59374869
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.4,
+                            "el":  891590592.19270325
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.4,
+                            "el":  1018959443.2686226
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.4,
+                            "el":  1146206576.3649807
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.4,
+                            "el":  1272830689.7265551
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.5,
+                            "el":  636850422.99479043
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.5,
+                            "el":  796063028.74349177
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.5,
+                            "el":  955275634.49218011
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.5,
+                            "el":  1114488240.2408729
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.5,
+                            "el":  1273699304.0857735
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.5,
+                            "el":  1432758220.4562378
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.5,
+                            "el":  1591038362.1582007
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.6,
+                            "el":  764220507.59374869
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.6,
+                            "el":  955275634.49218011
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.6,
+                            "el":  1146330761.3906212
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.6,
+                            "el":  1337385888.2890539
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.6,
+                            "el":  1528439164.9029286
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.6,
+                            "el":  1719309864.5474844
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.6,
+                            "el":  1909246034.5898209
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.7,
+                            "el":  891590592.19270337
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.7,
+                            "el":  1114488240.2408729
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.7,
+                            "el":  1337385888.2890539
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.7,
+                            "el":  1560283536.3372216
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.7,
+                            "el":  1783179025.7200766
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.7,
+                            "el":  2005861508.6387367
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.7,
+                            "el":  2227453707.021451
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.79999999999999993,
+                            "el":  1018960676.7916683
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.79999999999999993,
+                            "el":  1273700845.9895806
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.79999999999999993,
+                            "el":  1528441015.1874971
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.79999999999999993,
+                            "el":  1783181184.3854065
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.79999999999999993,
+                            "el":  2037918886.5372448
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.79999999999999993,
+                            "el":  2292413152.7299614
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.79999999999999993,
+                            "el":  2545661379.4531093
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  -0.2,
+                            "Sensitivity LGD[LGD Level":  0.89999999999999991,
+                            "el":  1146330761.3906212
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0,
+                            "Sensitivity LGD[LGD Level":  0.89999999999999991,
+                            "el":  1432913451.7382879
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.2,
+                            "Sensitivity LGD[LGD Level":  0.89999999999999991,
+                            "el":  1719496142.0859447
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.4,
+                            "Sensitivity LGD[LGD Level":  0.89999999999999991,
+                            "el":  2006078832.4336076
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.60000000000000009,
+                            "Sensitivity LGD[LGD Level":  0.89999999999999991,
+                            "el":  2292658747.3543892
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  0.8,
+                            "Sensitivity LGD[LGD Level":  0.89999999999999991,
+                            "el":  2578964796.8212008
+                        },
+                        {
+                            "Sensitivity PD[PD Stress Level":  1,
+                            "Sensitivity LGD[LGD Level":  0.89999999999999991,
+                            "el":  2863869051.8847685
+                        }
+                    ],
+    "model_holdout":  [
+                          {
+                              "roc_auc":  0.73974206006938459,
+                              "pr_auc":  0.24899807800026538,
+                              "brier":  0.076091808394300534,
+                              "ks":  0.37676815594272905,
+                              "threshold":  0.19419509684947953,
+                              "recall":  0.30882352941176472,
+                              "precision":  0.27155172413793105
+                          }
+                      ],
+    "narratives":  [
+                       {
+                           "executive":  "High/Critical grades hold 28.7% of customers but 28.7% of exposure and 59.6% of expected loss (scenario). Exposure-weighted PD is 9.09% vs. an observed difficulty rate of 9.05%.",
+                           "model":  "Holdout (evaluation): AUC 0.740 · PR-AUC 0.249 · KS 0.377 · mean PD − observed +0.13% · @thr 19.4% recall 30.9%, precision 27.2% (proxy PD; associations, not causes)",
+                           "header":  "SYNTHETIC TEST DATA (not Home Credit) · Population 30,000 applications · Model pd-lgbm-fv1.0-a6c83074-s42 · Refreshed 2026-10-15 18:09 UTC"
+                       }
+                   ]
+}

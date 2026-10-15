@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json",
+  "pageOrder": [
+    "p1_executive",
+    "p2_segmentation",
+    "p3_repayment",
+    "p4_model",
+    "p5_scenario"
+  ],
+  "activePageName": "p1_executive"
+}

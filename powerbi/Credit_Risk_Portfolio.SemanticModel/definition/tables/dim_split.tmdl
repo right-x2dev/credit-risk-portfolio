@@ -1,0 +1,64 @@
+table dim_split
+	lineageTag: 2bc0881c-5856-460d-bf52-d59b0b9a34d0
+
+	column dataset_split
+		dataType: string
+		lineageTag: 4dff4dd2-ee51-45b7-83ca-367512f0d098
+		summarizeBy: none
+		sourceColumn: dataset_split
+
+		annotation SummarizationSetBy = User
+
+	column split_label
+		dataType: string
+		lineageTag: 188606a4-18a1-44d5-8d8f-a3418780a01d
+		summarizeBy: none
+		sourceColumn: split_label
+		sortByColumn: sort_key
+
+		annotation SummarizationSetBy = User
+
+	column sort_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: af208a7f-510d-43ef-9eff-652705b7a48d
+		summarizeBy: none
+		sourceColumn: sort_key
+
+		annotation SummarizationSetBy = User
+
+	column is_evaluation
+		dataType: boolean
+		lineageTag: aec02eed-22b4-417d-9ba1-e298e0682e86
+		summarizeBy: none
+		sourceColumn: is_evaluation
+
+		annotation SummarizationSetBy = User
+
+	column description
+		dataType: string
+		lineageTag: a377f287-ae2a-4136-8aa7-c4ce1c2cd2da
+		summarizeBy: none
+		sourceColumn: description
+
+		annotation SummarizationSetBy = User
+
+	partition dim_split = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "dim_split"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "dim_split.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Parsed booleans" = if DataSource = "PostgreSQL" then Source else Table.TransformColumns(Source, {{"is_evaluation", each if _ = null then null else Text.Lower(_) = "true" or _ = "t"}}),
+				    #"Typed columns" = Table.TransformColumnTypes(#"Parsed booleans", {{"dataset_split", type text}, {"split_label", type text}, {"sort_key", Int64.Type}, {"is_evaluation", type logical}, {"description", type text}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

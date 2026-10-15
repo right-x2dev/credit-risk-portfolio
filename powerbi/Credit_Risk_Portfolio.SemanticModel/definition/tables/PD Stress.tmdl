@@ -1,0 +1,17 @@
+table 'PD Stress'
+	lineageTag: 38fe3881-7489-48e2-8382-e3c09d0ff578
+
+	column 'PD Stress Value'
+		dataType: double
+		formatString: +0%;-0%;0%
+		lineageTag: 2e1d936a-a536-4a79-ad50-34f1f03ff417
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition 'PD Stress' = calculated
+		mode: import
+		source = GENERATESERIES(-0.2, 1, 0.05)
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,94 @@
+table fact_scenario_base
+	lineageTag: cbc1ca52-006b-4e28-85be-ba0c28693766
+
+	column segment_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 8237c6b9-8af6-4e68-bac8-5964bf55df22
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	column risk_grade_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 3e54e3bd-9456-447a-b832-404d0859181c
+		summarizeBy: none
+		sourceColumn: risk_grade_key
+
+		annotation SummarizationSetBy = User
+
+	column customers
+		dataType: int64
+		formatString: 0
+		lineageTag: 24d77d0b-c306-4cf9-90f2-1c0738f238b5
+		summarizeBy: sum
+		sourceColumn: customers
+
+		annotation SummarizationSetBy = User
+
+	column exposure_proxy
+		dataType: double
+		formatString: #,0
+		lineageTag: 32799ba7-1397-4561-9f57-28c69f0ef50c
+		summarizeBy: none
+		sourceColumn: exposure_proxy
+
+		annotation SummarizationSetBy = User
+
+	column pd_x_exposure
+		dataType: double
+		formatString: #,0
+		lineageTag: e0a5f582-c88a-4052-9226-0c2d66705a00
+		summarizeBy: none
+		sourceColumn: pd_x_exposure
+
+		annotation SummarizationSetBy = User
+
+	column avg_pd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 52d1222a-95eb-46ed-b36e-066ef6126701
+		summarizeBy: none
+		sourceColumn: avg_pd
+
+		annotation SummarizationSetBy = User
+
+	column base_lgd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: cbf9131f-cf9a-4b3a-9668-d51ae72a72fa
+		summarizeBy: none
+		sourceColumn: base_lgd
+
+		annotation SummarizationSetBy = User
+
+	column base_expected_loss
+		dataType: double
+		formatString: #,0
+		lineageTag: 71552817-0dda-420c-800c-2411674a1ea5
+		summarizeBy: none
+		sourceColumn: base_expected_loss
+
+		annotation SummarizationSetBy = User
+
+	partition fact_scenario_base = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_scenario_base"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_scenario_base.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Typed columns" = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"risk_grade_key", Int64.Type}, {"customers", Int64.Type}, {"exposure_proxy", type number}, {"pd_x_exposure", type number}, {"avg_pd", type number}, {"base_lgd", type number}, {"base_expected_loss", type number}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,75 @@
+relationship d8745786-6831-4a76-9652-e98f10263903
+	fromColumn: fact_customer_risk.risk_grade_key
+	toColumn: dim_risk_grade.risk_grade_key
+
+relationship f16b8424-180d-4038-bb33-dba19ca1caa0
+	fromColumn: fact_customer_risk.segment_key
+	toColumn: dim_customer_segment.segment_key
+
+relationship eaa0495d-d857-4550-8566-ab9d57a8e93d
+	fromColumn: fact_customer_risk.model_version_key
+	toColumn: dim_model_version.model_version_key
+
+relationship e8849110-14aa-48fe-b548-498abb4f7314
+	fromColumn: fact_customer_risk.dataset_split
+	toColumn: dim_split.dataset_split
+
+relationship 341949d8-d108-46f8-bcae-ecef0bf22a9a
+	fromColumn: fact_scenario_base.risk_grade_key
+	toColumn: dim_risk_grade.risk_grade_key
+
+relationship bcd37715-e24c-4a7c-9ae1-70aa9930f10b
+	fromColumn: fact_scenario_base.segment_key
+	toColumn: dim_customer_segment.segment_key
+
+relationship 9efcb18d-59d5-4e91-86da-698bf8f79dc5
+	fromColumn: fact_model_evaluation.model_version_key
+	toColumn: dim_model_version.model_version_key
+
+relationship 71d241bf-727b-47d4-b0da-9ae828da1b74
+	fromColumn: fact_model_curve.model_version_key
+	toColumn: dim_model_version.model_version_key
+
+relationship 03840ae5-b871-4ad7-858a-7a671e9ba73d
+	fromColumn: fact_calibration.model_version_key
+	toColumn: dim_model_version.model_version_key
+
+relationship 9ce8724a-5778-4433-9a60-9a880a72b664
+	fromColumn: fact_lift.model_version_key
+	toColumn: dim_model_version.model_version_key
+
+relationship 7b456f44-679d-4adb-8e34-6d473d488a2d
+	fromColumn: fact_feature_importance.model_version_key
+	toColumn: dim_model_version.model_version_key
+
+relationship 3a9ed2a2-3f05-4216-aba5-cd95f59e24e5
+	fromColumn: fact_segment_performance.model_version_key
+	toColumn: dim_model_version.model_version_key
+
+relationship 7ddc107d-1fcf-4608-8856-94fb7c72ae93
+	fromColumn: fact_confusion_matrix.model_version_key
+	toColumn: dim_model_version.model_version_key
+
+relationship caee2b94-43be-4b40-804e-1924d425e1cb
+	fromColumn: fact_model_evaluation.dataset_split
+	toColumn: dim_split.dataset_split
+
+relationship 1871c1cf-83a2-409d-b328-84d39465dfbe
+	fromColumn: fact_model_curve.dataset_split
+	toColumn: dim_split.dataset_split
+
+relationship 3d8ca882-4a00-46f3-8168-56b36b3e71ef
+	fromColumn: fact_calibration.dataset_split
+	toColumn: dim_split.dataset_split
+
+relationship 5fcff27a-007f-4c0d-b085-c36e7eb380b8
+	fromColumn: fact_lift.dataset_split
+	toColumn: dim_split.dataset_split
+
+relationship ccea3654-166f-46d0-9311-f19950f01e0c
+	fromColumn: fact_segment_performance.dataset_split
+	toColumn: dim_split.dataset_split
+
+relationship 3b95039c-4c0a-4760-9537-7d3bc6483937
+	fromColumn: fact_confusion_matrix.dataset_split
+	toColumn: dim_split.dataset_split

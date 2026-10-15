@@ -1,0 +1,104 @@
+table report_metadata
+	lineageTag: 9a484c3a-4b6c-4cb8-a0c5-111dc13975ae
+
+	column last_refreshed
+		dataType: dateTime
+		lineageTag: 41d0a405-fc0f-47e5-b3ad-41a19e8c1b34
+		summarizeBy: none
+		sourceColumn: last_refreshed
+
+		annotation SummarizationSetBy = User
+
+	column model_version
+		dataType: string
+		lineageTag: 147968d5-64c3-4a72-b216-8b2b2d3109f4
+		summarizeBy: none
+		sourceColumn: model_version
+
+		annotation SummarizationSetBy = User
+
+	column algorithm
+		dataType: string
+		lineageTag: 0ee4abe9-fab4-4810-8b81-f5f056a02603
+		summarizeBy: none
+		sourceColumn: algorithm
+
+		annotation SummarizationSetBy = User
+
+	column calibration_method
+		dataType: string
+		lineageTag: 39bb6e0f-8c0a-4b05-98cd-d4b3b4aa989a
+		summarizeBy: none
+		sourceColumn: calibration_method
+
+		annotation SummarizationSetBy = User
+
+	column selected_threshold
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 3519a528-8529-4dec-8efc-af9cdf10dbbd
+		summarizeBy: none
+		sourceColumn: selected_threshold
+
+		annotation SummarizationSetBy = User
+
+	column trained_at
+		dataType: dateTime
+		lineageTag: b5fcfa82-08a1-4a47-bcb2-d2bb94db2127
+		summarizeBy: none
+		sourceColumn: trained_at
+
+		annotation SummarizationSetBy = User
+
+	column population_customers
+		dataType: int64
+		formatString: 0
+		lineageTag: 2a469a25-fd29-4869-99d0-66584463eda3
+		summarizeBy: none
+		sourceColumn: population_customers
+
+		annotation SummarizationSetBy = User
+
+	column population_note
+		dataType: string
+		lineageTag: d2f8b38f-b28f-4090-8d06-7d7753a25750
+		summarizeBy: none
+		sourceColumn: population_note
+
+		annotation SummarizationSetBy = User
+
+	column base_lgd
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 4d7e5145-8e83-4a37-9f42-6389b097b2aa
+		summarizeBy: none
+		sourceColumn: base_lgd
+
+		annotation SummarizationSetBy = User
+
+	column is_synthetic
+		dataType: boolean
+		lineageTag: bb705c84-833a-4443-9a7d-a5e8fe8cce4f
+		summarizeBy: none
+		sourceColumn: is_synthetic
+
+		annotation SummarizationSetBy = User
+
+	partition report_metadata = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "v_report_metadata"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "v_report_metadata.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Parsed booleans" = if DataSource = "PostgreSQL" then Source else Table.TransformColumns(Source, {{"is_synthetic", each if _ = null then null else Text.Lower(_) = "true" or _ = "t"}}),
+				    #"Typed columns" = Table.TransformColumnTypes(#"Parsed booleans", {{"last_refreshed", type datetime}, {"model_version", type text}, {"algorithm", type text}, {"calibration_method", type text}, {"selected_threshold", type number}, {"trained_at", type datetime}, {"population_customers", Int64.Type}, {"population_note", type text}, {"base_lgd", type number}, {"is_synthetic", type logical}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

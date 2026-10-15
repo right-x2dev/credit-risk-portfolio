@@ -1,0 +1,82 @@
+table fact_feature_importance
+	lineageTag: e2abe057-8d79-4762-8aff-dbde10cc27d9
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 09a29b30-6d69-436e-96d2-e3e9f81b2ba1
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column feature
+		dataType: string
+		lineageTag: c6559237-ba7a-4a76-9eb5-1e3b5bc0be29
+		summarizeBy: none
+		sourceColumn: feature
+
+		annotation SummarizationSetBy = User
+
+	column importance_rank
+		dataType: int64
+		formatString: 0
+		lineageTag: 9d4f8950-e701-48ca-afa2-bd3db670d184
+		summarizeBy: none
+		sourceColumn: importance_rank
+
+		annotation SummarizationSetBy = User
+
+	column mean_abs_shap
+		dataType: double
+		formatString: 0.0000
+		lineageTag: e8fe6021-ba48-4de6-9523-66d280922c94
+		summarizeBy: none
+		sourceColumn: mean_abs_shap
+
+		annotation SummarizationSetBy = User
+
+	column gain_importance
+		dataType: double
+		formatString: 0.0000
+		lineageTag: df8714ae-60a1-4e10-8da6-825dac13a808
+		summarizeBy: none
+		sourceColumn: gain_importance
+
+		annotation SummarizationSetBy = User
+
+	column split_importance
+		dataType: int64
+		formatString: 0
+		lineageTag: 72375822-649b-4079-9426-b8c39b140f2d
+		summarizeBy: none
+		sourceColumn: split_importance
+
+		annotation SummarizationSetBy = User
+
+	column direction
+		dataType: string
+		lineageTag: bd63d725-77b2-4f85-a8aa-9c6abcec7d87
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = User
+
+	partition fact_feature_importance = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_feature_importance"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_feature_importance.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Typed columns" = Table.TransformColumnTypes(Source, {{"model_version_key", Int64.Type}, {"feature", type text}, {"importance_rank", Int64.Type}, {"mean_abs_shap", type number}, {"gain_importance", type number}, {"split_importance", Int64.Type}, {"direction", type text}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

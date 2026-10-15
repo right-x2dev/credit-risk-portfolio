@@ -1,0 +1,92 @@
+# Project-level configuration. Secrets live in .env, never here.
+project:
+  name: credit-risk-portfolio
+  feature_version: "fv1.0"
+  random_seed_env: RANDOM_SEED
+
+# Raw source files. `required_columns` are checked before load; the full column
+# list is taken from the CSV header so the raw layer preserves the original shape.
+sources:
+  application_train:
+    file: application_train.csv
+    grain: one row per current application (SK_ID_CURR)
+    unique_key: [SK_ID_CURR]
+    required_columns: [SK_ID_CURR, TARGET, AMT_CREDIT, AMT_INCOME_TOTAL, AMT_ANNUITY, DAYS_BIRTH, DAYS_EMPLOYED]
+  application_test:
+    file: application_test.csv
+    grain: one row per current application (SK_ID_CURR), unlabeled
+    unique_key: [SK_ID_CURR]
+    required_columns: [SK_ID_CURR, AMT_CREDIT, AMT_INCOME_TOTAL]
+  bureau:
+    file: bureau.csv
+    grain: one row per external credit (SK_ID_BUREAU)
+    unique_key: [SK_ID_BUREAU]
+    required_columns: [SK_ID_CURR, SK_ID_BUREAU, CREDIT_ACTIVE, DAYS_CREDIT, AMT_CREDIT_SUM]
+  bureau_balance:
+    file: bureau_balance.csv
+    grain: one row per external credit x month
+    unique_key: [SK_ID_BUREAU, MONTHS_BALANCE]
+    required_columns: [SK_ID_BUREAU, MONTHS_BALANCE, STATUS]
+  previous_application:
+    file: previous_application.csv
+    grain: one row per previous Home Credit application (SK_ID_PREV)
+    unique_key: [SK_ID_PREV]
+    required_columns: [SK_ID_PREV, SK_ID_CURR, NAME_CONTRACT_STATUS, AMT_APPLICATION, AMT_CREDIT, DAYS_DECISION]
+  pos_cash_balance:
+    file: POS_CASH_balance.csv
+    grain: one row per previous credit x month
+    unique_key: null   # no guaranteed unique key in the source; duplicates are measured, not enforced
+    required_columns: [SK_ID_PREV, SK_ID_CURR, MONTHS_BALANCE, SK_DPD, SK_DPD_DEF]
+  credit_card_balance:
+    file: credit_card_balance.csv
+    grain: one row per previous card x month
+    unique_key: null
+    required_columns: [SK_ID_PREV, SK_ID_CURR, MONTHS_BALANCE, AMT_BALANCE, AMT_CREDIT_LIMIT_ACTUAL, SK_DPD]
+  installments_payments:
+    file: installments_payments.csv
+    grain: one row per payment event on an instalment
+    unique_key: null
+    required_columns: [SK_ID_PREV, SK_ID_CURR, NUM_INSTALMENT_NUMBER, DAYS_INSTALMENT, DAYS_ENTRY_PAYMENT, AMT_INSTALMENT, AMT_PAYMENT]
+  columns_description:
+    file: HomeCredit_columns_description.csv
+    grain: one row per documented column
+    unique_key: null
+    required_columns: [Table, Row, Description]
+    encoding: latin-1
+    optional: false
+
+# Foreign-key style relationships checked for orphans (child -> parent).
+relationships:
+  - {child: bureau, child_key: SK_ID_CURR, parent: application_all, parent_key: SK_ID_CURR, warn_ratio: 0.20, fail_ratio: 0.60}
+  - {child: bureau_balance, child_key: SK_ID_BUREAU, parent: bureau, parent_key: SK_ID_BUREAU, warn_ratio: 0.60, fail_ratio: 0.95}
+  - {child: previous_application, child_key: SK_ID_CURR, parent: application_all, parent_key: SK_ID_CURR, warn_ratio: 0.20, fail_ratio: 0.60}
+  - {child: pos_cash_balance, child_key: SK_ID_PREV, parent: previous_application, parent_key: SK_ID_PREV, warn_ratio: 0.10, fail_ratio: 0.50}
+  - {child: credit_card_balance, child_key: SK_ID_PREV, parent: previous_application, parent_key: SK_ID_PREV, warn_ratio: 0.10, fail_ratio: 0.50}
+  - {child: installments_payments, child_key: SK_ID_PREV, parent: previous_application, parent_key: SK_ID_PREV, warn_ratio: 0.10, fail_ratio: 0.50}
+
+quality:
+  null_ratio_warn: 0.60          # columns above this null ratio are flagged (warn)
+  max_join_amplification: 1.0    # customer-level marts must not amplify rows
+  days_employed_sentinel: 365243
+  previous_days_sentinel: 365243
+
+delinquency:
+  severe_dpd_days: 30            # installments/POS: >= 30 days late is "severe"
+  recent_months: [3, 6, 12, 24]
+
+risk:
+  exposure_proxy_column: AMT_CREDIT
+  base_lgd: 0.45                 # explicit assumption, NOT an observed LGD
+  pd_clip: [0.0001, 0.9999]
+  # Risk grades: [lower, upper) on calibrated PD. Validated against the score distribution in Phase 5.
+  grades:
+    - {grade: Low,      lower: 0.00, upper: 0.05, sort_key: 1, color_hex: "#2E7D9A"}
+    - {grade: Medium,   lower: 0.05, upper: 0.10, sort_key: 2, color_hex: "#8FA9C2"}
+    - {grade: High,     lower: 0.10, upper: 0.20, sort_key: 3, color_hex: "#E0A030"}
+    - {grade: Critical, lower: 0.20, upper: 1.0001, sort_key: 4, color_hex: "#B8423A"}
+  high_risk_grades: [High, Critical]
+
+segments:
+  age_bins: [18, 25, 35, 45, 55, 65, 100]
+  income_bins: [0, 100000, 150000, 200000, 300000, 1.0e+12]
+  income_labels: ["< 100K", "100K-150K", "150K-200K", "200K-300K", "300K+"]

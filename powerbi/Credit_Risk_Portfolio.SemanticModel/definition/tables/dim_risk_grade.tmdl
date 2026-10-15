@@ -1,0 +1,101 @@
+table dim_risk_grade
+	lineageTag: 1563c9bb-3bc5-4b0b-b5ee-2b3a05b477e7
+
+	column risk_grade_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: e74c02d3-c0f1-4bfa-b5e5-3a539917d73c
+		summarizeBy: none
+		sourceColumn: risk_grade_key
+
+		annotation SummarizationSetBy = User
+
+	column risk_grade
+		dataType: string
+		lineageTag: 39338d7c-d653-4b13-83fe-faf101eb0620
+		summarizeBy: none
+		sourceColumn: risk_grade
+		sortByColumn: sort_key
+
+		annotation SummarizationSetBy = User
+
+	column risk_group
+		dataType: string
+		lineageTag: 9497bef6-d903-4dc1-a2b2-4532b499c014
+		summarizeBy: none
+		sourceColumn: risk_group
+
+		annotation SummarizationSetBy = User
+
+	column risk_grade_label
+		dataType: string
+		lineageTag: 6de8b58b-0144-42ae-9caa-6b2da865f35b
+		summarizeBy: none
+		sourceColumn: risk_grade_label
+		sortByColumn: sort_key
+
+		annotation SummarizationSetBy = User
+
+	column pd_lower
+		dataType: double
+		formatString: 0.00%
+		lineageTag: 08b93cc0-6300-4f4e-9369-d2a0bdea10d6
+		summarizeBy: none
+		sourceColumn: pd_lower
+
+		annotation SummarizationSetBy = User
+
+	column pd_upper
+		dataType: double
+		formatString: 0.00%
+		lineageTag: d6611169-17ba-491e-864c-5e76a5881681
+		summarizeBy: none
+		sourceColumn: pd_upper
+
+		annotation SummarizationSetBy = User
+
+	column sort_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: b3bb9dbb-ef57-47d6-a250-51aeb945745f
+		summarizeBy: none
+		sourceColumn: sort_key
+
+		annotation SummarizationSetBy = User
+
+	column color_hex
+		dataType: string
+		lineageTag: a3d3abe0-5ca2-44ae-8dff-54912606c217
+		summarizeBy: none
+		sourceColumn: color_hex
+
+		annotation SummarizationSetBy = User
+
+	column is_high_risk
+		dataType: boolean
+		lineageTag: 785c1b7b-b566-4c71-b8f6-081f778f6d1d
+		summarizeBy: none
+		sourceColumn: is_high_risk
+
+		annotation SummarizationSetBy = User
+
+	partition dim_risk_grade = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "dim_risk_grade"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "dim_risk_grade.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Parsed booleans" = if DataSource = "PostgreSQL" then Source else Table.TransformColumns(Source, {{"is_high_risk", each if _ = null then null else Text.Lower(_) = "true" or _ = "t"}}),
+				    #"Typed columns" = Table.TransformColumnTypes(#"Parsed booleans", {{"risk_grade_key", Int64.Type}, {"risk_grade", type text}, {"risk_group", type text}, {"risk_grade_label", type text}, {"pd_lower", type number}, {"pd_upper", type number}, {"sort_key", Int64.Type}, {"color_hex", type text}, {"is_high_risk", type logical}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

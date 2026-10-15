@@ -1,0 +1,140 @@
+table dim_customer_segment
+	lineageTag: 4cc0c064-b255-4f84-a0ec-c2223f650133
+
+	column segment_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 76a99849-cbcd-4365-976a-b1cadedc08cf
+		summarizeBy: none
+		sourceColumn: segment_key
+
+		annotation SummarizationSetBy = User
+
+	column age_band
+		dataType: string
+		lineageTag: 870a1e01-cc10-4696-bb05-aa502deabc7b
+		summarizeBy: none
+		sourceColumn: age_band
+		sortByColumn: age_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column age_band_sort
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 691fdb5f-d660-498c-a5cc-5779e169f6db
+		summarizeBy: none
+		sourceColumn: age_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column income_band
+		dataType: string
+		lineageTag: d3e88478-759f-476a-b78a-0f48e1407f33
+		summarizeBy: none
+		sourceColumn: income_band
+		sortByColumn: income_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column income_band_sort
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: a132067b-bd31-414c-98d7-cc6eba955c95
+		summarizeBy: none
+		sourceColumn: income_band_sort
+
+		annotation SummarizationSetBy = User
+
+	column gender
+		dataType: string
+		lineageTag: ee3e46c1-d8a9-4e1f-83ef-f7baad1d53b0
+		summarizeBy: none
+		sourceColumn: gender
+
+		annotation SummarizationSetBy = User
+
+	column family_status
+		dataType: string
+		lineageTag: c3dd4bfe-fecd-4878-81de-10c11085a03e
+		summarizeBy: none
+		sourceColumn: family_status
+
+		annotation SummarizationSetBy = User
+
+	column housing_type
+		dataType: string
+		lineageTag: 92acbd09-0543-42ba-817d-bf67bb88ee8a
+		summarizeBy: none
+		sourceColumn: housing_type
+
+		annotation SummarizationSetBy = User
+
+	column education
+		dataType: string
+		lineageTag: e98ee2d1-dc61-46b0-b004-0d9acf659e5b
+		summarizeBy: none
+		sourceColumn: education
+
+		annotation SummarizationSetBy = User
+
+	column income_type
+		dataType: string
+		lineageTag: 0ef23540-69da-46f8-b2a3-5320638f1153
+		summarizeBy: none
+		sourceColumn: income_type
+
+		annotation SummarizationSetBy = User
+
+	column occupation
+		dataType: string
+		lineageTag: 2432d151-6db2-4a46-9aa1-b0ec92ba1f15
+		summarizeBy: none
+		sourceColumn: occupation
+
+		annotation SummarizationSetBy = User
+
+	column contract_type
+		dataType: string
+		lineageTag: 5bc9ccc1-c11f-45c9-b1a9-8207f13fdb37
+		summarizeBy: none
+		sourceColumn: contract_type
+
+		annotation SummarizationSetBy = User
+
+	column children_group
+		dataType: string
+		lineageTag: ffc56045-4b00-49c4-aaa8-30a68d6774e6
+		summarizeBy: none
+		sourceColumn: children_group
+
+		annotation SummarizationSetBy = User
+
+	column region_rating
+		dataType: string
+		lineageTag: 1acd66d9-af91-4568-9656-322142aacb37
+		summarizeBy: none
+		sourceColumn: region_rating
+
+		annotation SummarizationSetBy = User
+
+	partition dim_customer_segment = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "dim_customer_segment"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "dim_customer_segment.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Typed columns" = Table.TransformColumnTypes(Source, {{"segment_key", Int64.Type}, {"age_band", type text}, {"age_band_sort", Int64.Type}, {"income_band", type text}, {"income_band_sort", Int64.Type}, {"gender", type text}, {"family_status", type text}, {"housing_type", type text}, {"education", type text}, {"income_type", type text}, {"occupation", type text}, {"contract_type", type text}, {"children_group", type text}, {"region_rating", type text}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

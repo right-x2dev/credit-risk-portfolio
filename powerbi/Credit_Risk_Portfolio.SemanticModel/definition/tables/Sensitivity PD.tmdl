@@ -1,0 +1,17 @@
+table 'Sensitivity PD'
+	lineageTag: 060b5604-e010-4be2-be7d-620326d301ef
+
+	column 'PD Stress Level'
+		dataType: double
+		formatString: +0%;-0%;0%
+		lineageTag: c71b2d88-3ac6-4287-af98-9daf0b614b23
+		summarizeBy: none
+		sourceColumn: [PD Stress Level]
+
+		annotation SummarizationSetBy = User
+
+	partition 'Sensitivity PD' = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(-0.2, 1, 0.2), "PD Stress Level", [Value])
+
+	annotation PBI_ResultType = Table

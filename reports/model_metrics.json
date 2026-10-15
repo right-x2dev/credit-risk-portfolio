@@ -1,0 +1,248 @@
+{
+  "model_version": "pd-lgbm-fv1.0-a6c83074-s42",
+  "champion": "lightgbm",
+  "selection_metric": "roc_auc",
+  "validation_metrics_raw": {
+    "baseline_mean": {
+      "n": 4500,
+      "positives": 407,
+      "observed_rate": 0.09044,
+      "mean_pd": 0.09052,
+      "calibration_in_the_large": 8e-05,
+      "roc_auc": 0.5,
+      "pr_auc": 0.09044,
+      "log_loss": 0.30356,
+      "brier": 0.08226,
+      "ks": 0.0,
+      "top_decile_lift": 0.9828,
+      "top_decile_capture": 0.09828,
+      "top_decile_bad_exposure_capture": 0.09535
+    },
+    "logistic_regression": {
+      "n": 4500,
+      "positives": 407,
+      "observed_rate": 0.09044,
+      "mean_pd": 0.09073,
+      "calibration_in_the_large": 0.00029,
+      "roc_auc": 0.70848,
+      "pr_auc": 0.21713,
+      "log_loss": 0.2819,
+      "brier": 0.07793,
+      "ks": 0.3102,
+      "top_decile_lift": 2.87469,
+      "top_decile_capture": 0.28747,
+      "top_decile_bad_exposure_capture": 0.29787
+    },
+    "lightgbm": {
+      "n": 4500,
+      "positives": 407,
+      "observed_rate": 0.09044,
+      "mean_pd": 0.08789,
+      "calibration_in_the_large": -0.00256,
+      "roc_auc": 0.7286,
+      "pr_auc": 0.2384,
+      "log_loss": 0.27363,
+      "brier": 0.07615,
+      "ks": 0.362,
+      "top_decile_lift": 3.31695,
+      "top_decile_capture": 0.3317,
+      "top_decile_bad_exposure_capture": 0.33285
+    }
+  },
+  "champion_improvement_over_logreg": 0.02011944645709607,
+  "calibration_comparison": [
+    {
+      "method": "none",
+      "cv_brier": 0.07615360781745537,
+      "cv_log_loss": 0.27362662577983543,
+      "cv_mean_pd": 0.08788721682949857,
+      "observed_rate": 0.09044444444444444
+    },
+    {
+      "method": "sigmoid",
+      "cv_brier": 0.07624363100456429,
+      "cv_log_loss": 0.2738843495583231,
+      "cv_mean_pd": 0.09046453670861043,
+      "observed_rate": 0.09044444444444444
+    },
+    {
+      "method": "isotonic",
+      "cv_brier": 0.07653929214385845,
+      "cv_log_loss": 0.28037133659325025,
+      "cv_mean_pd": 0.09041214426994455,
+      "observed_rate": 0.09044444444444444
+    }
+  ],
+  "calibration_method": "sigmoid",
+  "threshold": 0.19419509684947953,
+  "threshold_policy": {
+    "policy": "review_capacity",
+    "review_capacity_share": 0.1
+  },
+  "best_iteration": 91,
+  "n_features": 266,
+  "n_numeric": 248,
+  "n_categorical": 18,
+  "leakage_check": {
+    "n_features": 266,
+    "max_single_feature_auc": 0.7154,
+    "worst_feature": "ext_source_mean"
+  },
+  "fit_seconds": {
+    "baseline_mean": 0.0,
+    "logistic_regression": 1.8,
+    "lightgbm": 2.4
+  },
+  "holdout_calibrated": {
+    "n": 4500.0,
+    "positives": 408.0,
+    "observed_rate": 0.09066666666666667,
+    "mean_pd": 0.09200909623856403,
+    "calibration_in_the_large": 0.001342429571897355,
+    "roc_auc": 0.7397420600693846,
+    "pr_auc": 0.24899807800026538,
+    "log_loss": 0.27214745951342934,
+    "brier": 0.07609180839430053,
+    "ks": 0.37676815594272905,
+    "top_decile_lift": 3.063725490196078,
+    "top_decile_capture": 0.30637254901960786,
+    "top_decile_bad_exposure_capture": 0.29605259140912005,
+    "tp_at_threshold": 126.0,
+    "fp_at_threshold": 338.0,
+    "tn_at_threshold": 3754.0,
+    "fn_at_threshold": 282.0,
+    "precision_at_threshold": 0.27155172413793105,
+    "recall_at_threshold": 0.3088235294117647,
+    "f1_at_threshold": 0.28899082568807344,
+    "flagged_share_at_threshold": 0.10311111111111111,
+    "threshold": 0.19419509684947953,
+    "bad_exposure_capture_at_threshold": 0.29793318204483704,
+    "expected_loss_capture_at_threshold": 0.3006776843425267
+  },
+  "validation_calibrated": {
+    "n": 4500.0,
+    "positives": 407.0,
+    "observed_rate": 0.09044444444444444,
+    "mean_pd": 0.09043962170144093,
+    "calibration_in_the_large": -4.82274300350749e-06,
+    "roc_auc": 0.7286029782975787,
+    "pr_auc": 0.23839576106383115,
+    "log_loss": 0.27341817471096014,
+    "brier": 0.07609237975159014,
+    "ks": 0.3619969613128665,
+    "top_decile_lift": 3.316953316953317,
+    "top_decile_capture": 0.3316953316953317,
+    "top_decile_bad_exposure_capture": 0.3328495310343048,
+    "tp_at_threshold": 135.0,
+    "fp_at_threshold": 315.0,
+    "tn_at_threshold": 3778.0,
+    "fn_at_threshold": 272.0,
+    "precision_at_threshold": 0.3,
+    "recall_at_threshold": 0.3316953316953317,
+    "f1_at_threshold": 0.31505250875145857,
+    "flagged_share_at_threshold": 0.1,
+    "threshold": 0.19419509684947953,
+    "bad_exposure_capture_at_threshold": 0.3328495310343048,
+    "expected_loss_capture_at_threshold": 0.30685573367215696
+  },
+  "split_sizes": {
+    "train": 21000,
+    "validation": 4500,
+    "holdout": 4500
+  },
+  "explain": {
+    "shap_sample_size": 4500,
+    "figures": {
+      "shap_importance": "C:\\Users\\User\\Documents\\IDM_LAB_Assignments\\Credit Risk & Loan Portfolio Analytics Platform\\reports\\figures\\model_shap_importance.png",
+      "shap_summary": "C:\\Users\\User\\Documents\\IDM_LAB_Assignments\\Credit Risk & Loan Portfolio Analytics Platform\\reports\\figures\\model_shap_summary.png",
+      "shap_dependence_ext_source_mean": "C:\\Users\\User\\Documents\\IDM_LAB_Assignments\\Credit Risk & Loan Portfolio Analytics Platform\\reports\\figures\\model_shap_dependence_ext_source_mean.png",
+      "shap_dependence_ext_source_max": "C:\\Users\\User\\Documents\\IDM_LAB_Assignments\\Credit Risk & Loan Portfolio Analytics Platform\\reports\\figures\\model_shap_dependence_ext_source_max.png",
+      "shap_dependence_ext_source_min": "C:\\Users\\User\\Documents\\IDM_LAB_Assignments\\Credit Risk & Loan Portfolio Analytics Platform\\reports\\figures\\model_shap_dependence_ext_source_min.png"
+    },
+    "top_features": [
+      {
+        "feature": "ext_source_mean",
+        "mean_abs_shap": 0.2001166720876218,
+        "direction": "higher value -> lower PD"
+      },
+      {
+        "feature": "ext_source_max",
+        "mean_abs_shap": 0.11977156854664965,
+        "direction": "higher value -> lower PD"
+      },
+      {
+        "feature": "ext_source_min",
+        "mean_abs_shap": 0.09375018421858576,
+        "direction": "higher value -> lower PD"
+      },
+      {
+        "feature": "ext_source_3",
+        "mean_abs_shap": 0.06457530112897975,
+        "direction": "higher value -> lower PD"
+      },
+      {
+        "feature": "pos_dpd_month_ratio",
+        "mean_abs_shap": 0.04196272921733347,
+        "direction": "higher value -> higher PD"
+      },
+      {
+        "feature": "bur_bb_dpd_month_ratio",
+        "mean_abs_shap": 0.03816990778465902,
+        "direction": "higher value -> higher PD"
+      },
+      {
+        "feature": "region_rating_client",
+        "mean_abs_shap": 0.036031338297778735,
+        "direction": "higher value -> higher PD"
+      },
+      {
+        "feature": "ext_source_2",
+        "mean_abs_shap": 0.03004195237804642,
+        "direction": "higher value -> lower PD"
+      },
+      {
+        "feature": "inst_late_ratio",
+        "mean_abs_shap": 0.030012611971760653,
+        "direction": "higher value -> higher PD"
+      },
+      {
+        "feature": "organization_type",
+        "mean_abs_shap": 0.027747583267954318,
+        "direction": "categorical / mixed"
+      },
+      {
+        "feature": "inst_late_count",
+        "mean_abs_shap": 0.02611633810463955,
+        "direction": "higher value -> higher PD"
+      },
+      {
+        "feature": "inst_underpaid_ratio",
+        "mean_abs_shap": 0.023253737433377785,
+        "direction": "higher value -> higher PD"
+      },
+      {
+        "feature": "pos_dpd_month_ratio_12m",
+        "mean_abs_shap": 0.021016830734080654,
+        "direction": "higher value -> higher PD"
+      },
+      {
+        "feature": "bur_bb_dpd_months_total",
+        "mean_abs_shap": 0.020491181204875045,
+        "direction": "higher value -> higher PD"
+      },
+      {
+        "feature": "inst_dpd_mean",
+        "mean_abs_shap": 0.019471712963164346,
+        "direction": "higher value -> higher PD"
+      }
+    ]
+  },
+  "artifact": "models\\pd-lgbm-fv1.0-a6c83074-s42.joblib",
+  "reload_max_abs_diff": 0.0,
+  "figures": {
+    "roc": "reports/figures/model_roc.png",
+    "pr": "reports/figures/model_pr.png",
+    "calibration": "reports/figures/model_calibration.png",
+    "lift": "reports/figures/model_lift.png"
+  }
+}

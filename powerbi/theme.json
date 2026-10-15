@@ -1,0 +1,28 @@
+{
+  "name": "CreditRiskTheme",
+  "dataColors": ["#1F3A5F", "#4F7CAC", "#E0A030", "#B8423A", "#8FA9C2", "#2E7D9A", "#5B6B7F", "#C9D6E3", "#7A5C99", "#3E8E7E"],
+  "background": "#FFFFFF",
+  "foreground": "#26364A",
+  "tableAccent": "#1F3A5F",
+  "good": "#2E7D9A",
+  "neutral": "#E0A030",
+  "bad": "#B8423A",
+  "maximum": "#B8423A",
+  "center": "#F3D9A4",
+  "minimum": "#FFFFFF",
+  "textClasses": {
+    "title": {"fontFace": "Segoe UI Semibold", "fontSize": 11, "color": "#1F3A5F"},
+    "label": {"fontFace": "Segoe UI", "fontSize": 9, "color": "#5B6B7F"},
+    "callout": {"fontFace": "Segoe UI Semibold", "fontSize": 20, "color": "#1F3A5F"},
+    "header": {"fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#1F3A5F"}
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "border": [{"show": true, "color": {"solid": {"color": "#DCE6F0"}}, "radius": 6}],
+        "dropShadow": [{"show": false}]
+      }
+    },
+    "page": {"*": {"background": [{"color": {"solid": {"color": "#F5F7FA"}}, "transparency": 0}]}}
+  }
+}

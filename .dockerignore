@@ -1,0 +1,9 @@
+.venv/
+data/
+models/
+.git/
+**/__pycache__/
+.pytest_cache/
+.ruff_cache/
+powerbi/screenshots/
+.env

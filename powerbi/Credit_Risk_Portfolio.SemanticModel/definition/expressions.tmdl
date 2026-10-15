@@ -1,0 +1,23 @@
+/// PostgreSQL = live mart schema (Import); CSV = exported mart snapshot
+expression DataSource = "PostgreSQL" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true, List={"PostgreSQL", "CSV"}, DefaultValue="PostgreSQL"]
+	lineageTag: af161213-642e-46cb-a704-4ddd2895cd19
+
+	annotation PBI_ResultType = Text
+
+/// Folder with the mart CSV snapshot (credit-risk export-bi)
+expression CsvFolder = "C:\\Users\\User\\Documents\\IDM_LAB_Assignments\\Credit Risk & Loan Portfolio Analytics Platform\\data\\processed\\powerbi\\" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 88973919-67a7-4d53-b8ed-26834ef9f162
+
+	annotation PBI_ResultType = Text
+
+/// PostgreSQL host:port
+expression PgServer = "localhost:5432" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: d9741efd-1598-46c0-bb45-ecff0946c1c5
+
+	annotation PBI_ResultType = Text
+
+/// PostgreSQL database
+expression PgDatabase = "credit_risk" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: f40ff7e1-73e0-46e1-a4f6-0416803768d3
+
+	annotation PBI_ResultType = Text

@@ -1,0 +1,83 @@
+table fact_model_curve
+	lineageTag: 973a577c-866a-48e7-8a2c-f59e86839d0f
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 77242fc5-8cae-4ccf-ad02-2b1ff5bd6418
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column dataset_split
+		dataType: string
+		lineageTag: 5ce46312-e46b-4386-b80c-eca1923b447d
+		summarizeBy: none
+		sourceColumn: dataset_split
+
+		annotation SummarizationSetBy = User
+
+	column curve
+		dataType: string
+		lineageTag: fd971714-1ba5-4fc2-9c35-206866a26530
+		summarizeBy: none
+		sourceColumn: curve
+
+		annotation SummarizationSetBy = User
+
+	column x
+		dataType: double
+		formatString: 0.0000
+		lineageTag: 0d706ae7-0ab0-4a81-98ad-f38532d90d15
+		summarizeBy: none
+		sourceColumn: x
+
+		annotation SummarizationSetBy = User
+
+	column y
+		dataType: double
+		formatString: 0.0000
+		lineageTag: a1811ee7-d4f0-4c00-b3ca-dbe0ae86628a
+		summarizeBy: none
+		sourceColumn: y
+
+		annotation SummarizationSetBy = User
+
+	column threshold
+		dataType: double
+		formatString: 0.00%
+		lineageTag: bbf2eb0f-e881-4f64-be98-34836cec45da
+		summarizeBy: none
+		sourceColumn: threshold
+
+		annotation SummarizationSetBy = User
+
+	column point_order
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: ba045225-190d-46a7-8472-7debebd72bca
+		summarizeBy: none
+		sourceColumn: point_order
+
+		annotation SummarizationSetBy = User
+
+	partition fact_model_curve = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_model_curve"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_model_curve.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Typed columns" = Table.TransformColumnTypes(Source, {{"model_version_key", Int64.Type}, {"dataset_split", type text}, {"curve", type text}, {"x", type number}, {"y", type number}, {"threshold", type number}, {"point_order", Int64.Type}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

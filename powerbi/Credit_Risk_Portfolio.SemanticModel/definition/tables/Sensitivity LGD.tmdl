@@ -1,0 +1,17 @@
+table 'Sensitivity LGD'
+	lineageTag: 56c2b891-4350-47ac-803b-e8824d4d6e16
+
+	column 'LGD Level'
+		dataType: double
+		formatString: 0%
+		lineageTag: 8bd4b471-e1dd-4878-8068-75617b6a920a
+		summarizeBy: none
+		sourceColumn: [LGD Level]
+
+		annotation SummarizationSetBy = User
+
+	partition 'Sensitivity LGD' = calculated
+		mode: import
+		source = SELECTCOLUMNS(GENERATESERIES(0.1, 0.9, 0.1), "LGD Level", [Value])
+
+	annotation PBI_ResultType = Table

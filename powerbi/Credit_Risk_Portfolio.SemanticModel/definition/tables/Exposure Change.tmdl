@@ -1,0 +1,17 @@
+table 'Exposure Change'
+	lineageTag: 6761073b-99e1-4f87-80c5-fb43592785f1
+
+	column 'Exposure Change Value'
+		dataType: double
+		formatString: +0%;-0%;0%
+		lineageTag: 3cab2d3b-a340-47ee-b84d-392c3fffc6f5
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = User
+
+	partition 'Exposure Change' = calculated
+		mode: import
+		source = GENERATESERIES(-0.3, 0.3, 0.05)
+
+	annotation PBI_ResultType = Table

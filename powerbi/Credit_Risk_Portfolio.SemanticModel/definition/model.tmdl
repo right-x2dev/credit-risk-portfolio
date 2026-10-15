@@ -1,0 +1,38 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+	annotation __PBI_TimeIntelligenceEnabled = 0
+
+	annotation PBI_QueryOrder = ["dim_risk_grade", "dim_model_version", "dim_split", "dim_customer_segment", "fact_customer_risk", "fact_scenario_base", "fact_model_evaluation", "fact_model_curve", "fact_calibration", "fact_lift", "fact_feature_importance", "fact_segment_performance", "fact_confusion_matrix", "report_metadata", "00_Measures", "PD Stress", "LGD Assumption", "Exposure Change", "Sensitivity PD", "Sensitivity LGD", "EL Bridge"]
+
+ref table dim_risk_grade
+ref table dim_model_version
+ref table dim_split
+ref table dim_customer_segment
+ref table fact_customer_risk
+ref table fact_scenario_base
+ref table fact_model_evaluation
+ref table fact_model_curve
+ref table fact_calibration
+ref table fact_lift
+ref table fact_feature_importance
+ref table fact_segment_performance
+ref table fact_confusion_matrix
+ref table report_metadata
+ref table '00_Measures'
+ref table 'PD Stress'
+ref table 'LGD Assumption'
+ref table 'Exposure Change'
+ref table 'Sensitivity PD'
+ref table 'Sensitivity LGD'
+ref table 'EL Bridge'
+
+ref expression DataSource
+ref expression CsvFolder
+ref expression PgServer
+ref expression PgDatabase

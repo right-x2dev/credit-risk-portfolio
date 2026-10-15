@@ -1,0 +1,88 @@
+table fact_model_evaluation
+	lineageTag: aa6e71ac-e09b-489d-87fb-a11a9dec1569
+
+	column model_version_key
+		dataType: int64
+		formatString: 0
+		isHidden
+		lineageTag: 2eb8394a-f2a2-49e4-929e-33d5b5efb408
+		summarizeBy: none
+		sourceColumn: model_version_key
+
+		annotation SummarizationSetBy = User
+
+	column model_name
+		dataType: string
+		lineageTag: fc90161a-2243-4caf-95f6-6dab8e0fc3a3
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = User
+
+	column score_type
+		dataType: string
+		lineageTag: fd8bc347-05df-407e-93c8-ae8e39847c06
+		summarizeBy: none
+		sourceColumn: score_type
+
+		annotation SummarizationSetBy = User
+
+	column dataset_split
+		dataType: string
+		lineageTag: 29216049-e122-46b8-8e50-c25f769ad0e2
+		summarizeBy: none
+		sourceColumn: dataset_split
+
+		annotation SummarizationSetBy = User
+
+	column metric
+		dataType: string
+		lineageTag: 95cfddf7-ef0b-4a32-9a41-d75776e3f3d6
+		summarizeBy: none
+		sourceColumn: metric
+
+		annotation SummarizationSetBy = User
+
+	column value
+		dataType: double
+		formatString: 0.0000
+		lineageTag: c1adb428-8d96-44b5-a135-265f2b657d3c
+		summarizeBy: none
+		sourceColumn: value
+
+		annotation SummarizationSetBy = User
+
+	column metric_label
+		dataType: string
+		lineageTag: da3bbe3f-ab9d-49c8-9e5e-bbd17f64a5dc
+		summarizeBy: none
+		sourceColumn: metric_label
+
+		annotation SummarizationSetBy = User
+
+	column is_champion_row
+		dataType: boolean
+		lineageTag: 600710cf-0daf-4a2e-9d33-6a2a6ef8db43
+		summarizeBy: none
+		sourceColumn: is_champion_row
+
+		annotation SummarizationSetBy = User
+
+	partition fact_model_evaluation = m
+		mode: import
+		source =
+				let
+				    Source =
+				        if DataSource = "PostgreSQL" then
+				            PostgreSQL.Database(PgServer, PgDatabase){[Schema = "mart", Item = "fact_model_evaluation"]}[Data]
+				        else
+				            Table.PromoteHeaders(
+				                Csv.Document(File.Contents(CsvFolder & "fact_model_evaluation.csv"),
+				                    [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				                [PromoteAllScalars = true]),
+				    #"Parsed booleans" = if DataSource = "PostgreSQL" then Source else Table.TransformColumns(Source, {{"is_champion_row", each if _ = null then null else Text.Lower(_) = "true" or _ = "t"}}),
+				    #"Typed columns" = Table.TransformColumnTypes(#"Parsed booleans", {{"model_version_key", Int64.Type}, {"model_name", type text}, {"score_type", type text}, {"dataset_split", type text}, {"metric", type text}, {"value", type number}, {"metric_label", type text}, {"is_champion_row", type logical}}, "en-US")
+				in
+				    #"Typed columns"
+
+	annotation PBI_ResultType = Table

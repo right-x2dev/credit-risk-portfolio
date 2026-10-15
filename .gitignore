@@ -1,0 +1,41 @@
+# Secrets
+.env
+*.env.local
+
+# Data (never commit raw Kaggle files)
+data/raw/*
+data/interim/*
+data/processed/*
+data/synthetic/
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+*.csv.zip
+*.dump
+*.backup
+
+# Model binaries
+models/*
+!models/.gitkeep
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+build/
+dist/
+
+# Power BI local caches
+powerbi/**/.pbi/localSettings.json
+powerbi/**/.pbi/cache.abf
+powerbi/**/*.pbix.bak
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

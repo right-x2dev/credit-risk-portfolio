@@ -1,0 +1,55 @@
+[project]
+name = "credit-risk"
+version = "1.0.0"
+description = "Credit Risk & Loan Portfolio Analytics Platform (Home Credit, PostgreSQL, ML, Power BI)"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pandas>=2.2,<3",
+    "numpy>=1.26,<3",
+    "pyarrow>=16",
+    "psycopg[binary]>=3.2,<4",
+    "sqlalchemy>=2.0,<3",
+    "scikit-learn>=1.5,<1.8",
+    "lightgbm>=4.3,<5",
+    "scipy>=1.13",
+    "statsmodels>=0.14",
+    "matplotlib>=3.8",
+    "pyyaml>=6",
+    "python-dotenv>=1.0",
+    "joblib>=1.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.5",
+    "nbformat>=5.10",
+    "nbconvert>=7.16",
+    "ipykernel>=6.29",
+]
+
+[project.scripts]
+credit-risk = "credit_risk.cli:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: requires a running PostgreSQL (docker compose up -d postgres)",
+]
